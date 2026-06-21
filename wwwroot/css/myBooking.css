@@ -1,0 +1,333 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.mybookings-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2.5rem 1.5rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.mybookings-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+/* Header */
+.mybookings-header {
+    margin-bottom: 2rem;
+}
+
+    .mybookings-header h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+
+    .mybookings-header p {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+/* Empty state */
+.empty-state {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 3.5rem 2rem;
+    text-align: center;
+}
+
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(45,212,191,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+}
+
+.empty-state h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.4rem;
+}
+
+.empty-state p {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+.btn-find-resort {
+    display: inline-block;
+    padding: 0.65rem 1.5rem;
+    background: rgb(45,212,191);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+    .btn-find-resort:hover {
+        background: rgb(20,190,170);
+        color: #fff;
+    }
+
+/* Booking list */
+.booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Booking card */
+.booking-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+}
+
+    .booking-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    }
+
+/* Card top strip màu teal */
+.booking-card-strip {
+    height: 4px;
+    background: rgb(45,212,191);
+}
+
+    .booking-card-strip.cancelled {
+        background: #e2e8f0;
+    }
+
+    .booking-card-strip.rejected {
+        background: #e2e8f0;
+    }
+
+.booking-card-inner {
+    padding: 1.25rem 1.5rem;
+}
+
+/* Header row */
+.bk-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.bk-code {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Status badges */
+.bk-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+    .bk-badge.pending {
+        background: #fef9c3;
+        color: #a16207;
+        border: 1px solid #fde68a;
+    }
+
+    .bk-badge.confirmed {
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .bk-badge.checkedin {
+        background: #ede9fe;
+        color: #6d28d9;
+        border: 1px solid #ddd6fe;
+    }
+
+    .bk-badge.completed {
+        background: rgba(45,212,191,0.1);
+        color: rgb(15,150,130);
+        border: 1px solid rgba(45,212,191,0.3);
+    }
+
+    .bk-badge.cancelled {
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .bk-badge.rejected {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+/* Resort info */
+.bk-resort h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.bk-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Info grid */
+.bk-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.bk-info-item label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.bk-info-item span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Amount row */
+.bk-amount {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.bk-amount-item label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+}
+
+.bk-amount-item span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+    .bk-amount-item span.paid {
+        color: rgb(15,150,130);
+    }
+
+/* Footer actions */
+.bk-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.btn-detail {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.45rem 1rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+    .btn-detail:hover {
+        border-color: rgb(45,212,191);
+        color: rgb(15,150,130);
+    }
+
+.btn-review {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.45rem 1rem;
+    background: rgba(45,212,191,0.08);
+    border: 1.5px solid rgba(45,212,191,0.3);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgb(15,150,130);
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+    .btn-review:hover {
+        background: rgba(45,212,191,0.15);
+        color: rgb(15,150,130);
+    }
+
+.btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.45rem 1rem;
+    background: #fff;
+    border: 1.5px solid #fecaca;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ef4444;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+    .btn-cancel:hover {
+        background: #fef2f2;
+    }
+
+@media (max-width: 540px) {
+    .bk-info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .mybookings-page {
+        padding: 1.5rem 1rem;
+    }
+}

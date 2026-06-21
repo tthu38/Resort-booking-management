@@ -1,0 +1,424 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.bkdetail-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2.5rem 1.5rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.bkdetail-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* Back link */
+.bkdetail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.83rem;
+    color: #64748b;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+}
+
+    .bkdetail-back:hover {
+        color: rgb(45,212,191);
+    }
+
+        .bkdetail-back:hover svg {
+            transform: translateX(-3px);
+        }
+
+    .bkdetail-back svg {
+        transition: transform 0.15s;
+    }
+
+/* Top hero card */
+.bkdetail-hero {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+}
+
+.bkdetail-hero-strip {
+    height: 5px;
+    background: rgb(45,212,191);
+}
+
+    .bkdetail-hero-strip.cancelled {
+        background: #e2e8f0;
+    }
+
+    .bkdetail-hero-strip.rejected {
+        background: #fecaca;
+    }
+
+.bkdetail-hero-body {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.bkdetail-code-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+}
+
+.bkdetail-code {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.5px;
+}
+
+/* Status badges */
+.bk-badge {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+    .bk-badge.pending {
+        background: #fef9c3;
+        color: #a16207;
+        border: 1px solid #fde68a;
+    }
+
+    .bk-badge.confirmed {
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .bk-badge.checkedin {
+        background: #ede9fe;
+        color: #6d28d9;
+        border: 1px solid #ddd6fe;
+    }
+
+    .bk-badge.completed {
+        background: rgba(45,212,191,0.1);
+        color: rgb(15,150,130);
+        border: 1px solid rgba(45,212,191,0.3);
+    }
+
+    .bk-badge.cancelled {
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .bk-badge.rejected {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .bk-badge.reviewed {
+        background: rgba(45,212,191,0.08);
+        color: rgb(15,150,130);
+        border: 1px solid rgba(45,212,191,0.25);
+    }
+
+/* Grid layout */
+.bkdetail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Cards */
+.bd-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.4rem 1.5rem;
+}
+
+.bd-card-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+    .bd-card-title svg {
+        color: rgb(45,212,191);
+        flex-shrink: 0;
+    }
+
+/* Resort info */
+.resort-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 5px;
+}
+
+.resort-addr {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.checkinout-times {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.cot-item label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+}
+
+.cot-item span {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Summary rows */
+.sum-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #f8fafc;
+}
+
+    .sum-row:last-child {
+        border-bottom: none;
+    }
+
+    .sum-row span:first-child {
+        color: #64748b;
+    }
+
+    .sum-row strong, .sum-row span:last-child {
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+/* Info grid inside dates card */
+.dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+}
+
+.dg-item label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 3px;
+}
+
+.dg-item span {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Rooms list */
+.room-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+    .room-item:last-child {
+        border-bottom: none;
+    }
+
+.room-item-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 3px;
+}
+
+.room-item-price {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+    .room-item-price strong {
+        color: #0f172a;
+    }
+
+/* Services */
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+    .service-item:last-child {
+        border-bottom: none;
+    }
+
+    .service-item span {
+        color: #475569;
+    }
+
+    .service-item strong {
+        color: #0f172a;
+    }
+
+.empty-services {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    padding: 0.5rem 0;
+}
+
+/* Payment card — full width */
+.bd-card.payment .sum-row.total {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.75rem 0;
+    margin-top: 4px;
+    border-top: 2px solid #e2e8f0;
+    border-bottom: none;
+}
+
+    .bd-card.payment .sum-row.total span:first-child {
+        color: #0f172a;
+    }
+
+    .bd-card.payment .sum-row.total span:last-child {
+        color: rgb(45,212,191);
+        font-size: 1.1rem;
+    }
+
+.bd-card.payment .sum-row.paid span:last-child {
+    color: rgb(15,150,130);
+}
+
+.bd-card.payment .sum-row.remain span:last-child {
+    color: #ef4444;
+}
+
+/* Special request */
+.bd-card.special p {
+    font-size: 0.875rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+/* Actions */
+.bkdetail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+}
+
+.btn-review-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.6rem 1.25rem;
+    background: rgba(45,212,191,0.08);
+    border: 1.5px solid rgba(45,212,191,0.3);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(15,150,130);
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+    .btn-review-action:hover {
+        background: rgba(45,212,191,0.15);
+        color: rgb(15,150,130);
+    }
+
+.btn-cancel-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.6rem 1.25rem;
+    background: #fff;
+    border: 1.5px solid #fecaca;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ef4444;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+    .btn-cancel-action:hover {
+        background: #fef2f2;
+    }
+
+.badge-reviewed {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.6rem 1.25rem;
+    background: rgba(45,212,191,0.08);
+    border: 1.5px solid rgba(45,212,191,0.2);
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(15,150,130);
+}
+
+@media (max-width: 620px) {
+    .bkdetail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dates-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .bkdetail-page {
+        padding: 1.5rem 1rem;
+    }
+}

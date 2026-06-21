@@ -1,0 +1,114 @@
+@{
+    ViewData["Title"] = "Về chúng tôi";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/about.css" asp-append-version="true" />
+}
+
+<div class="about-page">
+
+    <!-- Hero banner -->
+    <div class="about-hero">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=85&auto=format&fit=crop"
+             alt="Beach" class="about-hero-img" />
+        <div class="about-hero-overlay"></div>
+        <div class="about-hero-content">
+            <p class="about-eyebrow">Về chúng tôi</p>
+            <h1>Nền tảng đặt phòng resort<br>hàng đầu Việt Nam</h1>
+            <p class="about-hero-sub">Kết nối du khách với hàng trăm khu nghỉ dưỡng đẳng cấp từ Bắc đến Nam</p>
+        </div>
+    </div>
+
+    <div class="about-wrap">
+
+        <!-- Intro -->
+        <div class="about-intro">
+            <p>
+                Resort Booking là nền tảng đặt phòng resort hàng đầu Việt Nam, kết nối du khách với
+                hàng trăm khu nghỉ dưỡng đẳng cấp từ Bắc đến Nam. Chúng tôi cam kết mang lại trải
+                nghiệm đặt phòng đơn giản, nhanh chóng và giá tốt nhất — để mỗi kỳ nghỉ của bạn
+                thực sự là một kỳ nghỉ đáng nhớ.
+            </p>
+        </div>
+
+        <!-- Why grid -->
+        <div class="why-grid">
+
+            <div class="why-card">
+                <div class="why-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="rgb(45,212,191)" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="6" />
+                        <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+                    </svg>
+                </div>
+                <h4>Uy tín hàng đầu</h4>
+                <p>Phục vụ hơn 500.000 khách hàng trên toàn quốc với đánh giá 4.8 sao.</p>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="rgb(45,212,191)" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                </div>
+                <h4>500+ Resort</h4>
+                <p>Từ resort bình dân đến 5 sao xa hoa trải dài khắp mọi vùng biển Việt Nam.</p>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="rgb(45,212,191)" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.12 1.18 2 2 0 012.1 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z" />
+                    </svg>
+                </div>
+                <h4>Hỗ trợ 24/7</h4>
+                <p>Đội ngũ chăm sóc khách hàng luôn sẵn sàng giải đáp mọi thắc mắc của bạn.</p>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="rgb(45,212,191)" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <h4>An toàn tuyệt đối</h4>
+                <p>Thanh toán mã hóa SSL, chính sách hoàn tiền minh bạch và nhanh chóng.</p>
+            </div>
+
+        </div>
+
+        <!-- Stats strip -->
+        <div class="about-stats">
+            <div class="stat-item">
+                <span class="stat-num">500+</span>
+                <span class="stat-label">Resort đối tác</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num">500K+</span>
+                <span class="stat-label">Khách hàng</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num">63</span>
+                <span class="stat-label">Tỉnh thành</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num">4.8</span>
+                <span class="stat-label">Điểm đánh giá</span>
+            </div>
+        </div>
+
+    </div>
+</div>

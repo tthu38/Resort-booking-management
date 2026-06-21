@@ -1,0 +1,145 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+
+<div class="auth-split">
+
+    <!-- LEFT: Ảnh bãi biển resort -->
+    <div class="auth-left">
+        <img class="bg-img"
+             src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1400&q=85&auto=format&fit=crop"
+             alt="Beach resort" />
+        <div class="overlay"></div>
+
+        <div class="auth-left-content">
+            <div class="brand-logo">
+                <div class="brand-circle">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M1 11 Q4.5 2 8 7 Q11.5 12 15 5"
+                              stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+                        <circle cx="8" cy="13.5" r="1.8" fill="#fff" />
+                    </svg>
+                </div>
+                TravelVN
+            </div>
+
+            <div class="hero-text">
+                <h1>Bắt đầu hành trình<br>của bạn hôm nay.</h1>
+                <p>Tạo tài khoản miễn phí và khám phá hàng trăm resort tuyệt đẹp</p>
+            </div>
+
+            <div class="tagline-card">
+                <h3> Ưu đãi dành riêng cho thành viên mới</h3>
+                <p>Đăng ký ngay để nhận ưu đãi độc quyền, giá đặc biệt và gợi ý resort được cá nhân hóa cho bạn.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Form đăng ký -->
+    <div class="auth-right">
+        <div class="auth-form-wrap">
+
+            <div class="form-logo-circle">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="rgb(45,212,191)" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                </svg>
+            </div>
+
+            <h2>Tạo tài khoản</h2>
+
+            <form asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                <div class="form-group">
+                    <label asp-for="FullName">Họ và tên</label>
+                    <input asp-for="FullName" type="text"
+                           placeholder="Nguyễn Văn A" autocomplete="name" />
+                    <span asp-validation-for="FullName" class="field-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email"
+                           placeholder="your@email.com" autocomplete="email" />
+                    <span asp-validation-for="Email" class="field-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PhoneNumber">Số điện thoại</label>
+                    <input asp-for="PhoneNumber" type="tel"
+                           placeholder="09xxxxxxxx" autocomplete="tel" />
+                    <span asp-validation-for="PhoneNumber" class="field-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password">Mật khẩu</label>
+                    <div class="input-password">
+                        <input asp-for="Password" type="password"
+                               placeholder="Tối thiểu 6 ký tự"
+                               autocomplete="new-password" id="passwordInput" />
+                        <button type="button" class="toggle-pw"
+                                onclick="togglePw('passwordInput', this)"
+                                aria-label="Hiện/ẩn mật khẩu">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="field-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Xác nhận mật khẩu</label>
+                    <div class="input-password">
+                        <input asp-for="ConfirmPassword" type="password"
+                               placeholder="Nhập lại mật khẩu"
+                               autocomplete="new-password" id="confirmInput" />
+                        <button type="button" class="toggle-pw"
+                                onclick="togglePw('confirmInput', this)"
+                                aria-label="Hiện/ẩn mật khẩu">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+                </div>
+
+                <button type="submit" class="btn-primary-full">Tạo tài khoản</button>
+            </form>
+
+            <p class="auth-switch">
+                Đã có tài khoản?
+                <a asp-action="Login">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScripts" />
+    <script>
+        function togglePw(inputId, btn) {
+            const el = document.getElementById(inputId);
+            const isHidden = el.type === 'password';
+            el.type = isHidden ? 'text' : 'password';
+            btn.style.color = isHidden ? 'rgb(45,212,191)' : '#9ca3af';
+        }
+    </script>
+}

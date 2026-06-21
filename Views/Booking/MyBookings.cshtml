@@ -1,0 +1,166 @@
+@model List<ResortBookingMVC.Models.Booking>
+@using ResortBookingMVC.Models.Enums
+@{
+    ViewData["Title"] = "Booking của tôi";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/myBooking.css" asp-append-version="true" />
+}
+
+<div class="mybookings-page">
+    <div class="mybookings-wrap">
+
+        <div class="mybookings-header">
+            <h1>Booking của tôi</h1>
+            <p>Danh sách tất cả các đặt phòng của bạn</p>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgb(45,212,191)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <path d="M16 2v4M8 2v4M3 10h18" />
+                        <path d="M9 16l2 2 4-4" />
+                    </svg>
+                </div>
+                <h3>Chưa có booking nào</h3>
+                <p>Hãy tìm và đặt phòng resort đầu tiên của bạn!</p>
+                <a asp-controller="Resort" asp-action="Search" class="btn-find-resort">Tìm resort ngay</a>
+            </div>
+        }
+        else
+        {
+            <div class="booking-list">
+                @foreach (var b in Model)
+                {
+                    string badgeClass = b.Status switch
+                    {
+                        BookingStatus.Pending => "pending",
+                        BookingStatus.Confirmed => "confirmed",
+                        BookingStatus.CheckedIn => "checkedin",
+                        BookingStatus.Completed => "completed",
+                        BookingStatus.Cancelled => "cancelled",
+                        BookingStatus.Rejected => "rejected",
+                        _ => "cancelled"
+                    };
+                    string statusLabel = b.Status switch
+                    {
+                        BookingStatus.Pending => "Chờ xác nhận",
+                        BookingStatus.Confirmed => "Đã xác nhận",
+                        BookingStatus.CheckedIn => "Đã check-in",
+                        BookingStatus.Completed => "Hoàn thành",
+                        BookingStatus.Cancelled => "Đã hủy",
+                        BookingStatus.Rejected => "Bị từ chối",
+                        _ => b.Status.ToString()
+                    };
+                    bool isInactive = b.Status == BookingStatus.Cancelled || b.Status == BookingStatus.Rejected;
+
+                    <div class="booking-card">
+                        <div class="booking-card-strip @(isInactive ? "cancelled" : "")"></div>
+                        <div class="booking-card-inner">
+
+                            <!-- Header: mã booking + badge -->
+                            <div class="bk-header">
+                                <span class="bk-code">@b.BookingCode</span>
+                                <span class="bk-badge @badgeClass">@statusLabel</span>
+                            </div>
+
+                            <!-- Tên resort + địa điểm -->
+                            <div class="bk-resort">
+                                <h3>@b.Resort?.Name</h3>
+                                <div class="bk-location">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 21s-8-7.3-8-12a8 8 0 0116 0c0 4.7-8 12-8 12z" />
+                                        <circle cx="12" cy="9" r="2.5" />
+                                    </svg>
+                                    @b.Resort?.Location?.Province
+                                </div>
+                            </div>
+
+                            <!-- Info grid: ngày, đêm, phòng, khách -->
+                            <div class="bk-info-grid">
+                                <div class="bk-info-item">
+                                    <label>Nhận phòng</label>
+                                    <span>@b.CheckInDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <div class="bk-info-item">
+                                    <label>Trả phòng</label>
+                                    <span>@b.CheckOutDate.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <div class="bk-info-item">
+                                    <label>Thời gian</label>
+                                    <span>@b.TotalNights đêm</span>
+                                </div>
+                                <div class="bk-info-item">
+                                    <label>Số phòng</label>
+                                    <span>@b.NumRooms phòng</span>
+                                </div>
+                                <div class="bk-info-item">
+                                    <label>Người lớn</label>
+                                    <span>@b.NumAdults người</span>
+                                </div>
+                                <div class="bk-info-item">
+                                    <label>Trẻ em</label>
+                                    <span>@b.NumChildren em</span>
+                                </div>
+                            </div>
+
+                            <!-- Tổng tiền -->
+                            <div class="bk-amount">
+                                <div class="bk-amount-item">
+                                    <label>Tổng tiền</label>
+                                    <span>@b.TotalAmount.ToString("N0")đ</span>
+                                </div>
+                                <div class="bk-amount-item">
+                                    <label>Đã thanh toán</label>
+                                    <span class="paid">@b.PaidAmount.ToString("N0")đ</span>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="bk-footer">
+                                <a asp-action="Detail" asp-route-id="@b.Id" class="btn-detail">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                    Xem chi tiết
+                                </a>
+
+                                @if (b.Status == BookingStatus.Completed && b.Review == null)
+                                {
+                                    <a asp-action="WriteReview" asp-route-id="@b.Id" class="btn-review">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                        Đánh giá
+                                    </a>
+                                }
+
+                                @if (b.Status == BookingStatus.Pending || b.Status == BookingStatus.Confirmed)
+                                {
+                                    <form asp-action="Cancel" asp-route-id="@b.Id" method="post" style="display:inline"
+                                          onsubmit="return confirm('Bạn có chắc muốn hủy booking này?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn-cancel">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <path d="M15 9l-6 6M9 9l6 6" />
+                                            </svg>
+                                            Hủy booking
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+</div>

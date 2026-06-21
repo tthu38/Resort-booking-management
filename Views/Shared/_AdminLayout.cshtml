@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="admin-body">
+<div class="admin-wrapper">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">Admin</div>
+        <nav class="sidebar-nav">
+            <a asp-controller="Admin" asp-action="Index"><i class="fa fa-chart-bar"></i> Dashboard</a>
+            <a asp-controller="Admin" asp-action="Bookings"><i class="fa fa-calendar-check"></i> Bookings</a>
+            <a asp-controller="Admin" asp-action="Resorts"><i class="fa fa-hotel"></i> Resorts</a>
+            <a asp-controller="Admin" asp-action="Reviews"><i class="fa fa-star"></i> Đánh giá</a>
+            @if (User.IsInRole("ADMIN"))
+            {
+                <a asp-controller="Admin" asp-action="Users"><i class="fa fa-users"></i> Người dùng</a>
+            }
+            <hr/>
+            <a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> Về trang chủ</a>
+            <form asp-controller="Auth" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="sidebar-logout"><i class="fa fa-sign-out-alt"></i> Đăng xuất</button>
+            </form>
+        </nav>
+    </aside>
+    <div class="admin-main">
+        <header class="admin-header">
+            <span>Xin chào, <strong>@User.Identity?.Name</strong></span>
+        </header>
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> @TempData["Success"] <button class="alert-close" onclick="this.parentElement.remove()">×</button></div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-error"><i class="fa fa-exclamation-circle"></i> @TempData["Error"] <button class="alert-close" onclick="this.parentElement.remove()">×</button></div>
+        }
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

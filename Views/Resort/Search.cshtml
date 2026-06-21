@@ -1,0 +1,242 @@
+@model ResortSearchViewModel
+@{
+    ViewData["Title"] = "Tìm kiếm Resort";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/search.css" asp-append-version="true" />
+}
+
+<div class="search-page">
+
+    <!-- ── SIDEBAR BỘ LỌC ── -->
+    <aside class="filter-sidebar">
+        <h3>Bộ lọc</h3>
+
+        <form asp-action="Search" method="get" id="filterForm">
+
+            <div class="filter-group">
+                <label>Địa điểm</label>
+                <select name="Location" onchange="this.form.submit()">
+                    <option value="">Tất cả</option>
+                    @foreach (var loc in Model.Locations)
+                    {
+                        <option value="@loc.Province"
+                                selected="@(Model.Location == loc.Province ? "selected" : null)">
+                            @loc.Province
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Nhận phòng</label>
+                <input type="date" name="CheckIn" value="@Model.CheckIn" />
+            </div>
+
+            <div class="filter-group">
+                <label>Trả phòng</label>
+                <input type="date" name="CheckOut" value="@Model.CheckOut" />
+            </div>
+
+            <div class="filter-group filter-inline">
+                <div>
+                    <label>Số phòng</label>
+                    <input type="number" name="Rooms" value="@Model.Rooms" min="1" max="10" />
+                </div>
+                <div>
+                    <label>Người lớn</label>
+                    <input type="number" name="Adults" value="@Model.Adults" min="1" max="20" />
+                </div>
+            </div>
+
+            <div class="filter-divider"></div>
+
+            <div class="filter-group">
+                <label>Giá / đêm (VNĐ)</label>
+                <div class="price-range">
+                    <input type="number" name="MinPrice" value="@Model.MinPrice" placeholder="Từ" />
+                    <span>—</span>
+                    <input type="number" name="MaxPrice" value="@Model.MaxPrice" placeholder="Đến" />
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>Hạng sao</label>
+                <div class="star-options">
+                    @for (int s = 5; s >= 1; s--)
+                    {
+                        <label>
+                            <input type="radio" name="StarRating" value="@s"
+                                   checked="@(Model.StarRating == s ? "checked" : null)" />
+                            @string.Concat(Enumerable.Repeat("★", s))
+                        </label>
+                    }
+                    <label>
+                        <input type="radio" name="StarRating" value=""
+                               checked="@(Model.StarRating == null ? "checked" : null)" />
+                        Tất cả
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-apply">Áp dụng bộ lọc</button>
+
+        </form>
+    </aside>
+
+    <!-- ── KẾT QUẢ ── -->
+    <main class="search-results">
+
+        <div class="results-header">
+            <span class="results-count">
+                Tìm thấy <strong>@Model.TotalItems</strong> resort
+            </span>
+            <select name="SortBy" form="filterForm" class="sort-select"
+                    onchange="document.getElementById('filterForm').submit()">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.SortBy) ? "selected" : null)">Mới nhất</option>
+                <option value="price_asc" selected="@(Model.SortBy == "price_asc" ? "selected" : null)">Giá tăng dần</option>
+                <option value="price_desc" selected="@(Model.SortBy == "price_desc" ? "selected" : null)">Giá giảm dần</option>
+                <option value="rating" selected="@(Model.SortBy == "rating" ? "selected" : null)">Đánh giá cao</option>
+            </select>
+        </div>
+
+        @if (!Model.Results.Any())
+        {
+            <div class="search-empty">
+                <div class="search-empty-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                         stroke="rgb(45,212,191)" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                        <path d="M8 11h6M11 8v6" />
+                    </svg>
+                </div>
+                <h3>Không tìm thấy resort phù hợp</h3>
+                <p>Hãy thử thay đổi bộ lọc hoặc chọn địa điểm khác.</p>
+            </div>
+        }
+        else
+        {
+            <div class="results-list">
+                @foreach (var resort in Model.Results)
+                {
+                    var thumb = resort.Images?.FirstOrDefault(i => i.IsThumbnail)?.ImageUrl
+                    ?? resort.ThumbnailUrl ?? "/images/default-resort.jpg";
+                    var minPrice = resort.RoomTypes?.Any() == true
+                    ? resort.RoomTypes.Min(rt => rt.BasePricePerNight) : 0;
+                    var avgRating = resort.Reviews?.Any() == true
+                    ? resort.Reviews.Average(r => r.Rating) : 0;
+
+                    <div class="result-card">
+
+                        <!-- Ảnh -->
+                        <a asp-controller="Resort" asp-action="Detail" asp-route-id="@resort.Id"
+                           asp-route-checkIn="@Model.CheckIn" asp-route-checkOut="@Model.CheckOut"
+                           asp-route-adults="@Model.Adults" asp-route-children="@Model.Children"
+                           asp-route-rooms="@Model.Rooms" class="result-card-img">
+                            <img src="@thumb" alt="@resort.Name" loading="lazy" />
+                        </a>
+
+                        <!-- Nội dung -->
+                        <div class="result-card-body">
+
+                            <div class="result-card-top">
+                                <h3>
+                                    <a asp-controller="Resort" asp-action="Detail" asp-route-id="@resort.Id"
+                                       asp-route-checkIn="@Model.CheckIn" asp-route-checkOut="@Model.CheckOut"
+                                       asp-route-adults="@Model.Adults" asp-route-children="@Model.Children"
+                                       asp-route-rooms="@Model.Rooms">@resort.Name</a>
+                                </h3>
+                                @if (resort.StarRating.HasValue)
+                                {
+                                    <span class="star-badge">
+                                        @resort.StarRating
+                                        <svg width="11" height="11" viewBox="0 0 24 24"
+                                             fill="#f59e0b" stroke="#f59e0b" stroke-width="1">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    </span>
+                                }
+                            </div>
+
+                            <div class="resort-location">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 21s-8-7.3-8-12a8 8 0 0116 0c0 4.7-8 12-8 12z" />
+                                    <circle cx="12" cy="9" r="2.5" />
+                                </svg>
+                                @resort.Location?.Province — @resort.Address
+                            </div>
+
+                            @if (avgRating > 0)
+                            {
+                                <div class="rating-pill">
+                                    <svg width="11" height="11" viewBox="0 0 24 24"
+                                         fill="rgb(45,212,191)" stroke="rgb(45,212,191)" stroke-width="1">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                    </svg>
+                                    @avgRating.ToString("0.0")
+                                    <span style="color:#94a3b8;font-weight:400;">(@resort.Reviews?.Count đánh giá)</span>
+                                </div>
+                            }
+
+                        <p class="resort-desc">
+                            @(resort.Description?.Length > 120
+                                                    ? resort.Description[..120] + "…"
+                                                    : resort.Description)
+                    </p>
+
+                            <div class="result-card-footer">
+                                <div class="price-block">
+                                    <span class="price-label">Giá từ</span>
+                                    <span class="price-value">
+                                        @minPrice.ToString("N0")đ<small>/đêm</small>
+                                    </span>
+                                </div>
+                                <a asp-controller="Resort" asp-action="Detail" asp-route-id="@resort.Id"
+                                   asp-route-checkIn="@Model.CheckIn" asp-route-checkOut="@Model.CheckOut"
+                                   asp-route-adults="@Model.Adults" asp-route-children="@Model.Children"
+                                   asp-route-rooms="@Model.Rooms" class="btn-view-detail">
+                                    Xem chi tiết
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2.5"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                        }
+            </div>
+
+            <!-- PAGINATION -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="pagination">
+                    @for (int p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <a asp-action="Search"
+                           asp-route-Location="@Model.Location"
+                           asp-route-CheckIn="@Model.CheckIn"
+                           asp-route-CheckOut="@Model.CheckOut"
+                           asp-route-Adults="@Model.Adults"
+                           asp-route-Children="@Model.Children"
+                           asp-route-Rooms="@Model.Rooms"
+                           asp-route-MinPrice="@Model.MinPrice"
+                           asp-route-MaxPrice="@Model.MaxPrice"
+                           asp-route-StarRating="@Model.StarRating"
+                           asp-route-SortBy="@Model.SortBy"
+                           asp-route-Page="@p"
+                           class="page-link @(p == Model.Page ? "active" : "")">@p</a>
+                    }
+                </div>
+            }
+        }
+
+    </main>
+</div>

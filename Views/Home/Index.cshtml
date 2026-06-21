@@ -1,0 +1,228 @@
+@{
+    ViewData["Title"] = "Trang chủ";
+    var featuredResorts = ViewBag.FeaturedResorts as List<Resort> ?? new();
+    var locations = ViewBag.Locations as List<Location> ?? new();
+}
+
+
+<!-- ═══ HERO ═══ -->
+<section class="ch-hero">
+    <div class="ch-hero-bg">
+        <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1800&q=85" alt="Resort" />
+        <div class="ch-hero-overlay"></div>
+    </div>
+
+    <div class="ch-hero-body">
+        <p class="ch-eyebrow">Chào mừng đến với HolidayBooking</p>
+        <h1 class="ch-title">Kỳ nghỉ tuyệt vời<br />bắt đầu từ đây</h1>
+        <p class="ch-sub">Khám phá hàng trăm resort đẳng cấp khắp Việt Nam</p>
+        <div class="ch-hero-btns">
+            <a asp-controller="Resort" asp-action="Search" class="ch-btn-primary">Đặt phòng ngay</a>
+            <a asp-controller="Home" asp-action="About" class="ch-btn-ghost">Tìm hiểu thêm</a>
+        </div>
+    </div>
+
+    <!-- Search bar nổi -->
+    <div class="ch-search-wrap">
+        <div class="ch-search-card">
+            <div class="ch-search-tabs">
+                <button class="ch-tab active" type="button">Resort</button>
+                <button class="ch-tab" type="button">Khách sạn</button>
+                <button class="ch-tab" type="button">Villa</button>
+            </div>
+            <form asp-controller="Resort" asp-action="Search" method="get" class="ch-search-form">
+                <div class="ch-search-fields">
+                    <div class="ch-field">
+                        <label>Địa điểm</label>
+                        <select name="Location">
+                            <option value="">Chọn điểm đến</option>
+                            @foreach (var loc in locations)
+                            {
+                                <option value="@loc.Province">@loc.Province</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="ch-divider"></div>
+                    <div class="ch-field">
+                        <label>Số khách</label>
+                        <select name="Adults">
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                                <option value="@i" selected="@(i == 2 ? "selected" : null)">@i khách</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="ch-divider"></div>
+                    <div class="ch-field">
+                        <label>Nhận phòng</label>
+                        <input type="date" name="CheckIn" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="ch-divider"></div>
+                    <div class="ch-field">
+                        <label>Trả phòng</label>
+                        <input type="date" name="CheckOut" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                    </div>
+                    <button type="submit" class="ch-search-btn">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ DESTINATIONS ═══ -->
+<section class="ch-section ch-section-white ch-section-first">
+    <div class="container">
+        <div class="ch-section-hd">
+            <div>
+                <p class="ch-section-eyebrow">Điểm đến</p>
+                <h2 class="ch-section-title">Khám phá địa điểm nổi bật</h2>
+            </div>
+            <a asp-controller="Resort" asp-action="Search" class="ch-link-more">Xem tất cả</a>
+        </div>
+        <div class="ch-dest-grid">
+            @{
+                var destList = new[]
+                {
+                        new { Name="Đà Nẵng",  Img="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=700",  Count="48 resort", Size="large" },
+                        new { Name="Nha Trang", Img="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=700", Count="62 resort", Size="small" },
+                        new { Name="Phú Quốc",  Img="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700",  Count="37 resort", Size="small" },
+                        new { Name="Hội An",    Img="https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=700", Count="29 resort", Size="small" },
+                        new { Name="Đà Lạt",    Img="https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?w=700", Count="41 resort", Size="small" },
+                        };
+            }
+            @foreach (var d in destList)
+            {
+                <a asp-controller="Resort" asp-action="Search" asp-route-Location="@d.Name"
+                   class="ch-dest-card @(d.Size == "large" ? "ch-dest-large" : "")">
+                    <img src="@d.Img" alt="@d.Name" loading="lazy" />
+                    <div class="ch-dest-info">
+                        <span class="ch-dest-name">@d.Name</span>
+                        <span class="ch-dest-count">@d.Count</span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FEATURED RESORTS ═══ -->
+<section class="ch-section ch-section-gray">
+    <div class="container">
+        <div class="ch-section-hd">
+            <div>
+                <p class="ch-section-eyebrow">Lựa chọn hàng đầu</p>
+                <h2 class="ch-section-title">Resort nổi bật</h2>
+            </div>
+            <a asp-controller="Resort" asp-action="Search" class="ch-link-more">Xem tất cả</a>
+        </div>
+        <div class="ch-resort-grid">
+            @foreach (var resort in featuredResorts)
+            {
+                var thumb = resort.Images?.FirstOrDefault(i => i.IsThumbnail)?.ImageUrl
+                ?? resort.ThumbnailUrl
+                ?? "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700";
+                var minPrice = resort.RoomTypes?.Any() == true ? resort.RoomTypes.Min(rt => rt.BasePricePerNight) : 0;
+                var avgRating = resort.Reviews?.Any() == true ? resort.Reviews.Average(r => r.Rating) : 0;
+                var reviewCount = resort.Reviews?.Count ?? 0;
+
+                <a class="ch-resort-card" asp-controller="Resort" asp-action="Detail" asp-route-id="@resort.Id">
+                    <div class="ch-rc-img">
+                        <img src="@thumb" alt="@resort.Name" loading="lazy" />
+                        @if (resort.StarRating.HasValue)
+                        {
+                            <span class="ch-rc-badge">@resort.StarRating sao</span>
+                        }
+                        <div class="ch-rc-overlay">
+                            <span class="ch-rc-view">Xem chi tiết</span>
+                        </div>
+                    </div>
+                    <div class="ch-rc-body">
+                        <p class="ch-rc-loc">@resort.Location?.Province</p>
+                        <h3 class="ch-rc-name">@resort.Name</h3>
+                        <div class="ch-rc-foot">
+                            @if (avgRating > 0)
+                            {
+                                <div class="ch-rc-rating">
+                                    <span class="ch-rc-score">@avgRating.ToString("0.0")</span>
+                                    <span class="ch-rc-cnt">(@reviewCount đánh giá)</span>
+                                </div>
+                            }
+                            @if (minPrice > 0)
+                            {
+                                <div class="ch-rc-price">
+                                    <span class="ch-rc-from">từ</span>
+                                    <strong>@minPrice.ToString("N0")đ</strong>
+                                    <span class="ch-rc-per">/đêm</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ═══ WHY US ═══ -->
+<section class="ch-section ch-section-white">
+    <div class="container">
+        <div class="ch-why-wrap">
+            <div class="ch-why-img">
+                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900" alt="Resort" />
+                <div class="ch-why-badge">
+                    <strong>500+</strong>
+                    <span>Resort trên toàn quốc</span>
+                </div>
+            </div>
+            <div class="ch-why-content">
+                <p class="ch-section-eyebrow">Tại sao chọn chúng tôi</p>
+                <h2 class="ch-section-title">Trải nghiệm đặt phòng<br />hoàn toàn khác biệt</h2>
+                <p class="ch-why-desc">HolidayBooking mang đến nền tảng đặt phòng resort thông minh, nhanh chóng và đáng tin cậy nhất Việt Nam.</p>
+                <div class="ch-why-list">
+                    <div class="ch-why-item">
+                        <div class="ch-why-dot"></div>
+                        <div>
+                            <h4>Giá tốt nhất được đảm bảo</h4>
+                            <p>Tìm thấy giá rẻ hơn ở nơi khác — chúng tôi hoàn tiền chênh lệch ngay lập tức.</p>
+                        </div>
+                    </div>
+                    <div class="ch-why-item">
+                        <div class="ch-why-dot"></div>
+                        <div>
+                            <h4>Hủy phòng linh hoạt</h4>
+                            <p>Thay đổi kế hoạch không lo — đa số resort cho phép hủy miễn phí trước 48 giờ.</p>
+                        </div>
+                    </div>
+                    <div class="ch-why-item">
+                        <div class="ch-why-dot"></div>
+                        <div>
+                            <h4>Hỗ trợ 24/7 tận tâm</h4>
+                            <p>Đội ngũ CSKH luôn sẵn sàng qua điện thoại, chat và email mọi lúc mọi nơi.</p>
+                        </div>
+                    </div>
+                    <div class="ch-why-item">
+                        <div class="ch-why-dot"></div>
+                        <div>
+                            <h4>Thanh toán an toàn & nhanh</h4>
+                            <p>Hỗ trợ VNPay, MoMo, ZaloPay và thẻ quốc tế — giao dịch mã hóa SSL 256-bit.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PROMO ═══ -->
+<section class="ch-promo">
+    <div class="ch-promo-bg">
+        <img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=1600&q=80" alt="" />
+        <div class="ch-promo-overlay"></div>
+    </div>
+    <div class="container ch-promo-body">
+        <p class="ch-section-eyebrow" style="color:#7dd3fc">Ưu đãi độc quyền</p>
+        <h2 class="ch-promo-title">Giảm đến <span>30%</span> cho lần đặt phòng đầu tiên</h2>
+        <p class="ch-promo-desc">Đăng ký tài khoản ngay hôm nay và nhận mã giảm giá độc quyền qua email.</p>
+        <a asp-controller="Auth" asp-action="Register" class="ch-promo-btn">Nhận ưu đãi ngay</a>
+    </div>
+</section>

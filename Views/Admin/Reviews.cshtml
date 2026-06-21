@@ -1,0 +1,43 @@
+@model List<ResortBookingMVC.Models.Review>
+@{
+    ViewData["Title"] = "Quản lý đánh giá";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page-header">
+    <h2 class="admin-page-title">⭐ Quản lý đánh giá</h2>
+</div>
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead><tr><th>Khách hàng</th><th>Resort</th><th>Sao</th><th>Nội dung</th><th>Ngày</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.User?.FullName</td>
+                        <td>@r.Resort?.Name</td>
+                        <td>@string.Concat(Enumerable.Repeat("★", r.Rating))</td>
+                        <td><small>@(r.Comment?.Length > 80 ? r.Comment[..80] + "..." : r.Comment)</small></td>
+                        <td>@r.CreatedAt.ToString("dd/MM/yyyy")</td>
+                        <td><span class="badge @(r.IsApproved ? "badge-success" : "badge-warning")">@(r.IsApproved ? "Hiển thị" : "Chờ duyệt")</span></td>
+                        <td class="action-btns">
+                            @if (!r.IsApproved)
+                            {
+                                <form asp-action="ApproveReview" asp-route-id="@r.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-success">✔ Duyệt</button>
+                                </form>
+                            }
+                            <form asp-action="DeleteReview" asp-route-id="@r.Id" method="post"
+                                  onsubmit="return confirm('Xóa đánh giá này?')">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-danger">🗑 Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

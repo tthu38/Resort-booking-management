@@ -1,0 +1,334 @@
+@model ResortDetailViewModel
+@{
+    ViewData["Title"] = Model.Resort.Name;
+    var images = Model.Resort.Images?.OrderBy(i => i.SortOrder).ToList() ?? new();
+    var mainImg = images.FirstOrDefault(i => i.IsThumbnail)?.ImageUrl
+               ?? Model.Resort.ThumbnailUrl ?? "/images/default-resort.jpg";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/resortDetail.css" asp-append-version="true" />
+}
+
+<div class="detail-page">
+
+    <!-- ── GALLERY ── -->
+    <div class="gallery">
+        <div class="gallery-main">
+            <img id="mainImg" src="@mainImg" alt="@Model.Resort.Name" />
+        </div>
+        @if (images.Count > 1)
+        {
+            <div class="gallery-thumbs">
+                @foreach (var img in images.Take(6))
+                {
+                    <img src="@img.ImageUrl" alt=""
+                         onclick="document.getElementById('mainImg').src='@img.ImageUrl'"
+                         class="gallery-thumb" />
+                }
+            </div>
+        }
+    </div>
+
+    <div class="detail-layout">
+
+        <!-- ══ LEFT: Thông tin ══ -->
+        <div class="detail-info">
+
+            <!-- Header: tên + đánh giá -->
+            <div class="detail-header">
+                <div>
+                    <h1>@Model.Resort.Name</h1>
+                    <div class="resort-location">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 21s-8-7.3-8-12a8 8 0 0116 0c0 4.7-8 12-8 12z" />
+                            <circle cx="12" cy="9" r="2.5" />
+                        </svg>
+                        @Model.Resort.Address — @Model.Resort.Location?.Province
+                    </div>
+                    @if (Model.Resort.StarRating.HasValue)
+                    {
+                        <div class="star-row">
+                            @for (int s = 0; s < Model.Resort.StarRating; s++)
+                            {
+                                <svg width="14" height="14" viewBox="0 0 24 24"
+                                     fill="#f59e0b" stroke="#f59e0b" stroke-width="1">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                </svg>
+                            }
+                            <span>@Model.Resort.StarRating sao</span>
+                        </div>
+                    }
+                </div>
+                @if (Model.AverageRating > 0)
+                {
+                    <div class="rating-circle">
+                        <span class="rating-num">@Model.AverageRating.ToString("0.0")</span>
+                        <span class="rating-label">@Model.Reviews.Count đánh giá</span>
+                    </div>
+                }
+            </div>
+
+            <!-- Check-in / Check-out -->
+            <div class="checkin-strip">
+                <div class="checkin-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" />
+                        <polyline points="10 17 15 12 10 7" />
+                        <line x1="15" y1="12" x2="3" y2="12" />
+                    </svg>
+                    <div>
+                        <label>Nhận phòng</label>
+                        <span>@Model.Resort.CheckInTime.ToString("HH:mm")</span>
+                    </div>
+                </div>
+                <div class="checkin-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    <div>
+                        <label>Trả phòng</label>
+                        <span>@Model.Resort.CheckOutTime.ToString("HH:mm")</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mô tả -->
+            <div class="info-card">
+                <div class="info-card-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    Mô tả
+                </div>
+                <p>@Model.Resort.Description</p>
+            </div>
+
+            <!-- Dịch vụ -->
+            @if (Model.Resort.Services?.Any() == true)
+            {
+                <div class="info-card">
+                    <div class="info-card-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        Dịch vụ tiện ích
+                    </div>
+                    <div class="service-tags">
+                        @foreach (var svc in Model.Resort.Services)
+                        {
+                            <span class="service-tag">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2.5"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                @svc.Name — @svc.Price.ToString("N0")đ
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Chính sách hủy -->
+            @if (Model.Resort.CancellationPolicies?.Any() == true)
+            {
+                <div class="info-card">
+                    <div class="info-card-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        Chính sách hủy phòng
+                    </div>
+                    @foreach (var pol in Model.Resort.CancellationPolicies.OrderBy(c => c.DaysBeforeCheckIn))
+                    {
+                        <div class="policy-item">
+                            <div class="policy-dot"></div>
+                            <div>
+                                Hủy trước <strong>@pol.DaysBeforeCheckIn ngày</strong>:
+                                hoàn @pol.RefundPercentage% — @pol.Description
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <!-- Đánh giá -->
+            @if (Model.Reviews.Any())
+            {
+                <div class="info-card">
+                    <div class="info-card-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        Đánh giá của khách hàng
+                    </div>
+                    @foreach (var rv in Model.Reviews.Take(5))
+                    {
+                        var initial = rv.User?.FullName?.Length > 0
+                        ? rv.User.FullName[0].ToString().ToUpper() : "?";
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">@initial</div>
+                                <span class="review-author">@rv.User?.FullName</span>
+                                <div class="review-stars">
+                                    @for (int s = 0; s < rv.Rating; s++)
+                                    {
+                                        <svg width="12" height="12" viewBox="0 0 24 24"
+                                             fill="#f59e0b" stroke="#f59e0b" stroke-width="1">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    }
+                                </div>
+                                <span class="review-date">@rv.CreatedAt.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <p>@rv.Comment</p>
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+
+        <!-- ══ RIGHT SIDEBAR ══ -->
+        <aside class="detail-sidebar">
+
+            <!-- Form tìm phòng -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">Chọn ngày &amp; tìm phòng</div>
+                <form asp-controller="Resort" asp-action="Detail"
+                      asp-route-id="@Model.Resort.Id" method="get">
+
+                    <div class="sf-field">
+                        <label>Nhận phòng</label>
+                        <input type="date" name="checkIn" value="@Model.CheckIn" />
+                    </div>
+                    <div class="sf-field">
+                        <label>Trả phòng</label>
+                        <input type="date" name="checkOut" value="@Model.CheckOut" />
+                    </div>
+                    <div class="sf-grid">
+                        <div class="sf-field">
+                            <label>Người lớn</label>
+                            <input type="number" name="adults" value="@Model.Adults" min="1" max="20" />
+                        </div>
+                        <div class="sf-field">
+                            <label>Trẻ em</label>
+                            <input type="number" name="children" value="@Model.Children" min="0" max="10" />
+                        </div>
+                    </div>
+                    <div class="sf-field">
+                        <label>Số phòng</label>
+                        <input type="number" name="rooms" value="@Model.Rooms" min="1" max="10" />
+                    </div>
+                    <button type="submit" class="btn-check">Kiểm tra phòng trống</button>
+                </form>
+            </div>
+
+            <!-- Danh sách phòng -->
+            @if (Model.AvailableRoomTypes.Any())
+            {
+                <div class="sidebar-card">
+                    <div class="sidebar-card-title">Loại phòng khả dụng</div>
+                    @foreach (var rt in Model.AvailableRoomTypes)
+                    {
+                        var rtImg = rt.Images?.FirstOrDefault()?.ImageUrl
+                        ?? rt.ThumbnailUrl    
+                        ?? "/images/default-room.jpg";
+                        <div class="room-type-card">
+                            <img src="@rtImg" alt="@rt.Name" class="room-type-img" />
+                            <div class="room-type-info">
+                                <h4>@rt.Name</h4>
+                                <div class="room-meta">
+                                    @if (!string.IsNullOrEmpty(rt.BedType))
+                                    {
+                                        <span>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" />
+                                                <path d="M2 11h20v9a2 2 0 01-2 2H4a2 2 0 01-2-2v-9z" />
+                                            </svg>
+                                            @rt.BedType
+                                        </span>
+                                    }
+                                    <span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                            <circle cx="9" cy="7" r="4" />
+                                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                        </svg>
+                                        Tối đa @rt.MaxAdults người lớn, @rt.MaxChildren trẻ em
+                                    </span>
+                                    @if (rt.AreaSqm.HasValue)
+                                    {
+                                        <span>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="15 3 21 3 21 9" />
+                                                <polyline points="9 21 3 21 3 15" />
+                                                <line x1="21" y1="3" x2="14" y2="10" />
+                                                <line x1="3" y1="21" x2="10" y2="14" />
+                                            </svg>
+                                            @rt.AreaSqm m²
+                                        </span>
+                                    }
+                                </div>
+                                <div class="room-type-footer">
+                                    <span class="room-price">@rt.BasePricePerNight.ToString("N0")đ<small style="font-size:0.7rem;font-weight:500;color:#64748b;">/đêm</small></span>
+                                    <a asp-controller="Booking" asp-action="Create"
+                                       asp-route-resortId="@Model.Resort.Id"
+                                       asp-route-roomTypeId="@rt.Id"
+                                       asp-route-checkIn="@Model.CheckIn"
+                                       asp-route-checkOut="@Model.CheckOut"
+                                       asp-route-rooms="@Model.Rooms"
+                                       asp-route-adults="@Model.Adults"
+                                       asp-route-children="@Model.Children"
+                                       class="btn-book">Đặt phòng</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.CheckIn))
+            {
+                <div class="no-room-notice">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Không có phòng trống cho ngày đã chọn. Hãy thử ngày khác.
+                </div>
+            }
+
+        </aside>
+    </div>
+</div>

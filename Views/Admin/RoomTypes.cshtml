@@ -1,0 +1,64 @@
+@model List<ResortBookingMVC.Models.RoomType>
+@{
+    ViewData["Title"] = "Loại phòng";
+    Layout = "_AdminLayout";
+    var resort = ViewBag.Resort as ResortBookingMVC.Models.Resort;
+}
+
+<div class="admin-page-header">
+    <div>
+        <h2 class="admin-page-title">🛏 Loại phòng — @resort?.Name</h2>
+    </div>
+    <div style="display:flex;gap:10px;">
+        <a asp-action="CreateRoomType" asp-route-resortId="@resort?.Id" class="btn btn-primary">+ Thêm loại phòng</a>
+        <a asp-action="Resorts" class="btn btn-outline">← Quay lại</a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Tên loại phòng</th>
+                    <th>Sức chứa</th>
+                    <th>Diện tích</th>
+                    <th>Loại giường</th>
+                    <th>Giá/đêm</th>
+                    <th>Đặt cọc</th>
+                    <th>Số phòng</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:30px;">Chưa có loại phòng nào</td></tr>
+                }
+                @foreach (var rt in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@rt.Name</strong>
+                            @if (!string.IsNullOrEmpty(rt.Description))
+                            {
+                                <br/><small style="color:#94a3b8;">@(rt.Description.Length > 60 ? rt.Description[..60] + "..." : rt.Description)</small>
+                            }
+                        </td>
+                        <td>@rt.MaxAdults NL + @rt.MaxChildren TE</td>
+                        <td>@(rt.AreaSqm.HasValue ? rt.AreaSqm + " m²" : "—")</td>
+                        <td>@(rt.BedType ?? "—")</td>
+                        <td style="color:#0ea5e9;font-weight:700;">@rt.BasePricePerNight.ToString("N0")đ</td>
+                        <td>@rt.DepositPercentage%</td>
+                        <td><span class="badge badge-info">@rt.Rooms?.Count phòng</span></td>
+                        <td>
+                            <span class="badge @(rt.IsActive ? "badge-success" : "badge-danger")">
+                                @(rt.IsActive ? "Active" : "Ẩn")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

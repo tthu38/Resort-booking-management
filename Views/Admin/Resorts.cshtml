@@ -1,0 +1,41 @@
+@model List<ResortBookingMVC.Models.Resort>
+@{
+    ViewData["Title"] = "Quản lý Resort";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page-header">
+    <h2 class="admin-page-title">🏨 Quản lý Resort</h2>
+    <a asp-action="CreateResort" class="btn btn-primary">+ Thêm resort</a>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr><th>Tên resort</th><th>Địa điểm</th><th>Sao</th><th>Số loại phòng</th><th>Trạng thái</th><th>Hành động</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td><strong>@r.Name</strong><br/><small>@r.Address</small></td>
+                        <td>@r.Location?.Province</td>
+                        <td>@(r.StarRating.HasValue ? string.Concat(Enumerable.Repeat("★", r.StarRating.Value)) : "-")</td>
+                        <td>@r.RoomTypes?.Count loại</td>
+                        <td><span class="badge @(r.IsActive ? "badge-success" : "badge-danger")">@(r.IsActive ? "Hoạt động" : "Ẩn")</span></td>
+                        <td class="action-btns">
+                            <a asp-action="EditResort" asp-route-id="@r.Id" class="btn btn-sm btn-warning">✏ Sửa</a>
+                            <a asp-action="RoomTypes" asp-route-resortId="@r.Id" class="btn btn-sm btn-info">🛏 Phòng</a>
+                            <form asp-action="DeleteResort" asp-route-id="@r.Id" method="post" style="display:inline"
+                                  onsubmit="return confirm('Xác nhận ẩn resort?')">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm btn-danger">🗑 Ẩn</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,550 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+/* ── GALLERY ── */
+.gallery {
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 6px;
+}
+
+.gallery-main {
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+    .gallery-main img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s;
+    }
+
+        .gallery-main img:hover {
+            transform: scale(1.02);
+        }
+
+.gallery-thumbs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+    .gallery-thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+.gallery-thumb {
+    width: 110px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 9px;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    transition: border-color 0.15s, opacity 0.15s;
+    opacity: 0.75;
+}
+
+    .gallery-thumb:hover {
+        border-color: rgb(45,212,191);
+        opacity: 1;
+    }
+
+/* ── LAYOUT: left info + right sidebar ── */
+.detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 1.75rem;
+    align-items: flex-start;
+}
+
+/* ── LEFT ── */
+.detail-info {
+    min-width: 0;
+}
+
+/* Header */
+.detail-header {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+    .detail-header h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 6px;
+        line-height: 1.2;
+    }
+
+.resort-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.star-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+    .star-row svg {
+        color: #f59e0b;
+    }
+
+    .star-row span {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-left: 4px;
+    }
+
+.rating-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(45,212,191,0.1);
+    border: 2px solid rgba(45,212,191,0.3);
+    flex-shrink: 0;
+}
+
+.rating-num {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: rgb(15,150,130);
+    line-height: 1;
+}
+
+.rating-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: #64748b;
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* Checkin info strip */
+.checkin-strip {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.checkin-item {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 0.85rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .checkin-item svg {
+        color: rgb(45,212,191);
+        flex-shrink: 0;
+    }
+
+    .checkin-item label {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 2px;
+    }
+
+    .checkin-item span {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+/* Info cards */
+.info-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.info-card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+    .info-card-title svg {
+        color: rgb(45,212,191);
+    }
+
+.info-card p {
+    font-size: 0.875rem;
+    color: #475569;
+    line-height: 1.7;
+}
+
+/* Services */
+.service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.service-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: rgba(45,212,191,0.07);
+    border: 1px solid rgba(45,212,191,0.22);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+    .service-tag svg {
+        color: rgb(45,212,191);
+        flex-shrink: 0;
+    }
+
+/* Cancellation policy */
+.policy-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.65rem 0;
+    font-size: 0.875rem;
+    color: #475569;
+    border-bottom: 1px solid #f8fafc;
+}
+
+    .policy-item:last-child {
+        border-bottom: none;
+    }
+
+.policy-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgb(45,212,191);
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+
+.policy-item strong {
+    color: #0f172a;
+}
+
+/* Reviews */
+.review-card {
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+    .review-card:last-child {
+        border-bottom: none;
+    }
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.review-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(45,212,191,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgb(15,150,130);
+    flex-shrink: 0;
+}
+
+.review-author {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.review-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.review-date {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-left: auto;
+}
+
+.review-card p {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+/* ── RIGHT SIDEBAR ── */
+.detail-sidebar {
+    position: sticky;
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.sidebar-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.4rem 1.5rem;
+}
+
+.sidebar-card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Date form */
+.sf-field {
+    margin-bottom: 0.85rem;
+}
+
+    .sf-field label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 0.35rem;
+    }
+
+    .sf-field input {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 9px;
+        font-size: 0.875rem;
+        color: #0f172a;
+        background: #fff;
+        outline: none;
+        font-family: inherit;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+        .sf-field input:focus {
+            border-color: rgb(45,212,191);
+            box-shadow: 0 0 0 3px rgba(45,212,191,0.15);
+        }
+
+.sf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+}
+
+.btn-check {
+    display: block;
+    width: 100%;
+    padding: 0.7rem;
+    background: rgb(45,212,191);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 1rem;
+    transition: background 0.15s;
+}
+
+    .btn-check:hover {
+        background: rgb(20,190,170);
+    }
+
+/* Room type cards */
+.room-type-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+}
+
+    .room-type-card:last-child {
+        border-bottom: none;
+    }
+
+.room-type-img {
+    width: 90px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 9px;
+    flex-shrink: 0;
+    align-self: center;
+    margin-left: 8px;
+}
+
+.room-type-info {
+    flex: 1;
+    min-width: 0;
+}
+
+    .room-type-info h4 {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+
+.room-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+
+    .room-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    .room-meta svg {
+        color: #94a3b8;
+        flex-shrink: 0;
+    }
+
+.room-type-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.room-price {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.btn-book {
+    display: inline-block;
+    padding: 0.38rem 0.7rem;
+    background: rgb(45,212,191);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 7px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+
+    .btn-book:hover {
+        background: rgb(20,190,170);
+        color: #fff;
+    }
+
+.no-room-notice {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+    .no-room-notice svg {
+        color: #94a3b8;
+        flex-shrink: 0;
+    }
+
+@media (max-width: 900px) {
+    .detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-sidebar {
+        position: static;
+    }
+
+    .gallery-main {
+        height: 260px;
+    }
+}
+
+@media (max-width: 540px) {
+    .detail-page {
+        padding: 1.25rem 1rem 2rem;
+    }
+
+    .checkin-strip {
+        flex-direction: column;
+    }
+}

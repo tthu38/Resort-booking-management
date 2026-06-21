@@ -1,0 +1,41 @@
+@model List<ResortBookingMVC.Models.User>
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page-header">
+    <h2 class="admin-page-title">👥 Quản lý người dùng</h2>
+</div>
+<form asp-action="Users" method="get" class="admin-filter-bar">
+    <input type="text" name="search" value="@ViewBag.Search" placeholder="Tìm tên hoặc email..." class="form-control" />
+    <button type="submit" class="btn btn-primary">Tìm</button>
+</form>
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead><tr><th>Họ tên</th><th>Email</th><th>SĐT</th><th>Vai trò</th><th>Trạng thái</th><th>Ngày tạo</th><th>Hành động</th></tr></thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.FullName</td>
+                        <td>@u.Email</td>
+                        <td>@u.PhoneNumber</td>
+                        <td><span class="badge badge-@u.Role.ToString().ToLower()">@u.Role</span></td>
+                        <td><span class="badge @(u.IsActive ? "badge-success" : "badge-danger")">@(u.IsActive ? "Active" : "Blocked")</span></td>
+                        <td>@u.CreatedAt.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <form asp-action="ToggleUserActive" asp-route-id="@u.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-sm @(u.IsActive ? "btn-danger" : "btn-success")">
+                                    @(u.IsActive ? "Khóa" : "Mở khóa")
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

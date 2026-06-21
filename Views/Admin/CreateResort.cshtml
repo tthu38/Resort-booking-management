@@ -1,0 +1,62 @@
+@model ResortBookingMVC.Models.Resort
+@{
+    ViewData["Title"] = "Thêm Resort";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page-header">
+    <h2 class="admin-page-title">➕ Thêm Resort mới</h2>
+    <a asp-action="Resorts" class="btn btn-outline">← Quay lại</a>
+</div>
+
+<div class="admin-card" style="max-width:700px">
+    <form asp-action="CreateResort" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="form-group">
+            <label>Tên resort *</label>
+            <input asp-for="Name" class="form-control" placeholder="VD: Vinpearl Da Nang" />
+        </div>
+        <div class="form-group">
+            <label>Địa điểm *</label>
+            <select asp-for="LocationId" class="form-control">
+                @foreach (var loc in ViewBag.Locations as List<ResortBookingMVC.Models.Location> ?? new())
+                {
+                    <option value="@loc.Id">@loc.Province @(loc.District != null ? "- " + loc.District : "")</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ chi tiết</label>
+            <input asp-for="Address" class="form-control" placeholder="Số nhà, đường, phường..." />
+        </div>
+        <div class="form-group">
+            <label>Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="form-inline-2">
+            <div class="form-group">
+                <label>Số sao (1-5)</label>
+                <input asp-for="StarRating" type="number" min="1" max="5" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>URL Ảnh đại diện</label>
+                <input asp-for="ThumbnailUrl" class="form-control" placeholder="https://..." />
+            </div>
+        </div>
+        <div class="form-inline-2">
+            <div class="form-group">
+                <label>Giờ check-in</label>
+                <input asp-for="CheckInTime" type="time" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Giờ check-out</label>
+                <input asp-for="CheckOutTime" type="time" class="form-control" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">💾 Lưu resort</button>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScripts" /> }

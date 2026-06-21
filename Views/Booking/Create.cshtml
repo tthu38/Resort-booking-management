@@ -1,0 +1,124 @@
+@model CreateBookingViewModel
+@{
+    ViewData["Title"] = "Xác nhận đặt phòng";
+}
+
+<div class="booking-page container">
+    <h1 class="page-title">🏨 Xác nhận đặt phòng</h1>
+
+    <div class="booking-layout">
+        <!-- FORM -->
+        <div class="booking-form-section">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ResortId" />
+                <input type="hidden" asp-for="RoomTypeId" />
+                <input type="hidden" asp-for="CheckInDate" />
+                <input type="hidden" asp-for="CheckOutDate" />
+                <input type="hidden" asp-for="NumRooms" />
+                <input type="hidden" asp-for="NumAdults" />
+                <input type="hidden" asp-for="NumChildren" />
+
+                <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+                <!-- Guest Info -->
+                <div class="form-card">
+                    <h3>👤 Thông tin khách</h3>
+                    <p>Thông tin sẽ lấy từ tài khoản của bạn. Bạn có thể cập nhật tại <a asp-controller="Auth" asp-action="Profile">hồ sơ</a>.</p>
+                </div>
+
+                <!-- Special Request -->
+                <div class="form-card">
+                    <h3>📝 Yêu cầu đặc biệt</h3>
+                    <div class="form-group">
+                        <textarea asp-for="SpecialRequest" class="form-control" rows="3"
+                                  placeholder="VD: phòng tầng cao, giường đôi, đặt sớm, v.v..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                @if (Model.Services.Any())
+                {
+                    <div class="form-card">
+                        <h3>🛎 Dịch vụ thêm</h3>
+                        @foreach (var svc in Model.Services)
+                        {
+                            <div class="service-option">
+                                <label>
+                                    <input type="checkbox" name="SelectedServiceIds" value="@svc.Id" />
+                                    @svc.Name
+                                </label>
+                                <span class="svc-price">+@svc.Price.ToString("N0")đ</span>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <!-- Payment Type -->
+                <div class="form-card">
+                    <h3>💳 Hình thức thanh toán</h3>
+                    <div class="payment-options">
+                        <label class="payment-opt">
+                            <input type="radio" asp-for="PaymentType" value="Deposit" checked="checked" />
+                            <div class="payment-opt-box">
+                                <strong>Đặt cọc @Model.RoomType?.DepositPercentage%</strong>
+                                <span>Thanh toán <strong>@Model.DepositAmount.ToString("N0")đ</strong> ngay</span>
+                            </div>
+                        </label>
+                        <label class="payment-opt">
+                            <input type="radio" asp-for="PaymentType" value="FullPayment" />
+                            <div class="payment-opt-box">
+                                <strong>Thanh toán toàn bộ</strong>
+                                <span>Thanh toán <strong>@Model.EstimatedTotal.ToString("N0")đ</strong> ngay</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full btn-lg">
+                    ✅ Xác nhận đặt phòng
+                </button>
+            </form>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="booking-summary">
+            <div class="summary-card">
+                <h3>📋 Tóm tắt đặt phòng</h3>
+
+                @if (Model.Resort != null)
+                {
+                    <div class="summary-resort">
+                        <strong>@Model.Resort.Name</strong>
+                        <span><i class="fa fa-map-marker-alt"></i> @Model.Resort.Location?.Province</span>
+                    </div>
+                }
+
+                @if (Model.RoomType != null)
+                {
+                    <div class="summary-row"><span>Loại phòng</span><span>@Model.RoomType.Name</span></div>
+                }
+                <div class="summary-row"><span>Nhận phòng</span><span>@Model.CheckInDate</span></div>
+                <div class="summary-row"><span>Trả phòng</span><span>@Model.CheckOutDate</span></div>
+                <div class="summary-row"><span>Số đêm</span><span>@Model.TotalNights đêm</span></div>
+                <div class="summary-row"><span>Số phòng</span><span>@Model.NumRooms</span></div>
+                <div class="summary-row"><span>Người lớn</span><span>@Model.NumAdults</span></div>
+                <div class="summary-row"><span>Trẻ em</span><span>@Model.NumChildren</span></div>
+
+                <hr />
+                <div class="summary-row">
+                    <span>Tiền phòng</span>
+                    <span>@Model.EstimatedTotal.ToString("N0")đ</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Tổng cộng</span>
+                    <strong>@Model.EstimatedTotal.ToString("N0")đ</strong>
+                </div>
+                <div class="summary-row deposit-row">
+                    <span>Cần thanh toán ngay</span>
+                    <strong class="deposit-amount">@Model.DepositAmount.ToString("N0")đ</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

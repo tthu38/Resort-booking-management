@@ -1,0 +1,412 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.profile-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2.5rem 1.5rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.profile-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* ── Top bar: avatar + name + edit btn ── */
+.profile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgb(45, 212, 191);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 12px rgba(45,212,191,0.3);
+}
+
+.profile-topbar-info {
+    flex: 1;
+}
+
+    .profile-topbar-info h1 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 2px;
+    }
+
+    .profile-topbar-info p {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+.btn-edit-profile {
+    padding: 0.5rem 1.25rem;
+    background: rgb(45, 212, 191);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+
+    .btn-edit-profile:hover {
+        background: rgb(20, 190, 170);
+        color: #fff;
+    }
+
+/* ── Card ── */
+.profile-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.25rem;
+}
+
+.profile-card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* ── Field grid ── */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+}
+
+    .profile-grid.single {
+        grid-template-columns: 1fr;
+    }
+
+.pf-item label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 0.3rem;
+}
+
+.pf-item .pf-value {
+    font-size: 0.9rem;
+    color: #0f172a;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+    .pf-item .pf-value.empty {
+        color: #cbd5e1;
+        font-style: italic;
+    }
+
+/* ── Email row with icon ── */
+.email-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.85rem 1rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.email-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(45,212,191,0.12);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.email-row .email-addr {
+    font-size: 0.9rem;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+.email-row .email-since {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* ── Role badge ── */
+.role-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(45,212,191,0.1);
+    color: rgb(15,150,130);
+    border: 1px solid rgba(45,212,191,0.25);
+}
+
+/* ── Booking shortcut ── */
+.btn-my-bookings {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1.25rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+    .btn-my-bookings:hover {
+        border-color: rgb(45,212,191);
+        color: rgb(15,150,130);
+    }
+
+/* ── Joined ── */
+.profile-joined {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+    .profile-joined span {
+        color: rgb(45,212,191);
+        font-weight: 600;
+    }
+
+/* ══════════════════════════════
+   EDIT PROFILE PAGE
+══════════════════════════════ */
+.editprofile-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2.5rem 1.5rem;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.editprofile-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.editprofile-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #64748b;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+}
+
+    .editprofile-back:hover {
+        color: rgb(45,212,191);
+    }
+
+    .editprofile-back svg {
+        transition: transform 0.15s;
+    }
+
+    .editprofile-back:hover svg {
+        transform: translateX(-3px);
+    }
+
+.editprofile-header {
+    margin-bottom: 1.75rem;
+}
+
+    .editprofile-header h1 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+
+    .editprofile-header p {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+.editprofile-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.25rem;
+}
+
+    .editprofile-card .card-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+.edit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+}
+
+.edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+    .edit-field.full {
+        grid-column: 1 / -1;
+    }
+
+    .edit-field label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .edit-field input {
+        padding: 0.6rem 0.9rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        color: #0f172a;
+        background: #fff;
+        outline: none;
+        font-family: inherit;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+        .edit-field input:focus {
+            border-color: rgb(45,212,191);
+            box-shadow: 0 0 0 3px rgba(45,212,191,0.15);
+        }
+
+        .edit-field input[readonly] {
+            background: #f8fafc;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+    .edit-field .field-hint {
+        font-size: 0.73rem;
+        color: #94a3b8;
+    }
+
+.field-error-msg {
+    font-size: 0.73rem;
+    color: #ef4444;
+}
+
+.validation-summary-errors {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: #b91c1c;
+    margin-bottom: 1.25rem;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+}
+
+.btn-save-edit {
+    flex: 1;
+    padding: 0.7rem;
+    background: rgb(45,212,191);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+    .btn-save-edit:hover {
+        background: rgb(20,190,170);
+    }
+
+.btn-cancel-edit {
+    padding: 0.7rem 1.5rem;
+    background: #fff;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: border-color 0.15s;
+}
+
+    .btn-cancel-edit:hover {
+        border-color: #94a3b8;
+    }
+
+/* pw strength hint */
+.pw-hint {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+@media (max-width: 540px) {
+    .profile-grid,
+    .edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-field.full {
+        grid-column: 1;
+    }
+
+    .profile-card, .editprofile-card {
+        padding: 1.25rem;
+    }
+
+    .edit-actions {
+        flex-direction: column;
+    }
+}

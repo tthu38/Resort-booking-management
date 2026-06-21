@@ -1,0 +1,204 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.about-page {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+/* ── HERO ── */
+.about-hero {
+    position: relative;
+    height: 360px;
+    overflow: hidden;
+}
+
+.about-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+    display: block;
+}
+
+.about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 160deg, rgba(0,0,0,0.45) 0%, rgba(0,80,70,0.35) 50%, rgba(0,0,0,0.55) 100% );
+}
+
+.about-hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 2rem 1.5rem;
+    z-index: 2;
+}
+
+.about-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgb(45,212,191);
+    margin-bottom: 0.75rem;
+    opacity: 0.95;
+}
+
+.about-hero-content h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.85rem;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.4);
+}
+
+.about-hero-sub {
+    font-size: 0.95rem;
+    opacity: 0.88;
+    max-width: 520px;
+    line-height: 1.6;
+}
+
+/* ── WRAP ── */
+.about-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3rem;
+}
+
+/* ── INTRO ── */
+.about-intro {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid rgb(45,212,191);
+}
+
+    .about-intro p {
+        font-size: 1rem;
+        line-height: 1.85;
+        color: #475569;
+    }
+
+/* ── WHY GRID ── */
+.why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.why-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+
+    .why-card:hover {
+        box-shadow: 0 6px 24px rgba(45,212,191,0.12);
+        transform: translateY(-2px);
+    }
+
+.why-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(45,212,191,0.08);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(45,212,191,0.18);
+}
+
+.why-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.4rem;
+}
+
+.why-card p {
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* ── STATS ── */
+.about-stats {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 100px;
+}
+
+.stat-num {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: rgb(45,212,191);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #64748b;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 40px;
+    background: #e2e8f0;
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero {
+        height: 260px;
+    }
+
+    .about-hero-content h1 {
+        font-size: 1.4rem;
+    }
+
+    .stat-divider {
+        display: none;
+    }
+
+    .about-stats {
+        gap: 1.5rem;
+    }
+}

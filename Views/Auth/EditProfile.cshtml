@@ -1,0 +1,94 @@
+﻿@model ResortBookingMVC.ViewModels.EditProfileViewModel
+@{
+    ViewData["Title"] = "Cập nhật hồ sơ";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+}
+
+<div class="editprofile-page">
+    <div class="editprofile-wrap">
+
+        <!-- Back -->
+        <a asp-action="Profile" class="editprofile-back">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.8"
+                      stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Quay lại hồ sơ
+        </a>
+
+        <!-- Header -->
+        <div class="editprofile-header">
+            <h1>Cập nhật hồ sơ</h1>
+            <p>Thay đổi thông tin cá nhân và mật khẩu của bạn</p>
+        </div>
+
+        <form asp-action="EditProfile" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+            <!-- Thông tin cá nhân -->
+            <div class="editprofile-card">
+                <div class="card-title">Thông tin cá nhân</div>
+                <div class="edit-grid">
+
+                    <div class="edit-field full">
+                        <label asp-for="FullName">Họ và tên</label>
+                        <input asp-for="FullName" placeholder="Nhập họ và tên" />
+                        <span asp-validation-for="FullName" class="field-error-msg"></span>
+                    </div>
+
+                    <div class="edit-field full">
+                        <label asp-for="Email">Email</label>
+                        <input asp-for="Email" type="email" placeholder="your@email.com" />
+                        <span asp-validation-for="Email" class="field-error-msg"></span>
+                    </div>
+
+                    <div class="edit-field full">
+                        <label asp-for="PhoneNumber">Số điện thoại</label>
+                        <input asp-for="PhoneNumber" placeholder="09xxxxxxxx" />
+                        <span asp-validation-for="PhoneNumber" class="field-error-msg"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Đổi mật khẩu -->
+            <div class="editprofile-card">
+                <div class="card-title">Đổi mật khẩu</div>
+                <div class="edit-grid">
+
+                    <div class="edit-field full">
+                        <label asp-for="NewPassword">Mật khẩu mới</label>
+                        <input asp-for="NewPassword" type="password"
+                               placeholder="Để trống nếu không muốn đổi" />
+                        <span class="pw-hint">Tối thiểu 6 ký tự. Để trống nếu không muốn thay đổi.</span>
+                        <span asp-validation-for="NewPassword" class="field-error-msg"></span>
+                    </div>
+
+                    <div class="edit-field full">
+                        <label asp-for="ConfirmPassword">Xác nhận mật khẩu mới</label>
+                        <input asp-for="ConfirmPassword" type="password"
+                               placeholder="Nhập lại mật khẩu mới" />
+                        <span asp-validation-for="ConfirmPassword" class="field-error-msg"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="edit-actions">
+                <button type="submit" class="btn-save-edit">Lưu thay đổi</button>
+                <a asp-action="Profile" class="btn-cancel-edit">Hủy</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScripts" />
+}

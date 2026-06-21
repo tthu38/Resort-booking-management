@@ -1,0 +1,30 @@
+@model Booking
+@{
+    ViewData["Title"] = "Đặt phòng thành công";
+}
+
+<div class="success-page container">
+    <div class="success-card">
+        <div class="success-icon">✅</div>
+        <h1>Đặt phòng thành công!</h1>
+        <p>Mã booking của bạn: <strong class="booking-code-big">#@Model.BookingCode</strong></p>
+        <p>Chúng tôi sẽ xác nhận booking trong vòng 24 giờ qua email.</p>
+
+        <div class="success-summary">
+            <div class="summary-row"><span>Resort</span><strong>@Model.Resort?.Name</strong></div>
+            <div class="summary-row"><span>Địa điểm</span><span>@Model.Resort?.Location?.Province</span></div>
+            <div class="summary-row"><span>Nhận phòng</span><span>@Model.CheckInDate.ToString("dd/MM/yyyy")</span></div>
+            <div class="summary-row"><span>Trả phòng</span><span>@Model.CheckOutDate.ToString("dd/MM/yyyy")</span></div>
+            <div class="summary-row"><span>Số đêm</span><span>@Model.TotalNights</span></div>
+            <div class="summary-row"><span>Số phòng</span><span>@Model.NumRooms</span></div>
+            <hr/>
+            <div class="summary-row"><span>Tổng tiền</span><strong>@Model.TotalAmount.ToString("N0")đ</strong></div>
+            <div class="summary-row"><span>Tiền cọc</span><strong>@Model.DepositAmount.ToString("N0")đ</strong></div>
+        </div>
+
+        <div class="success-actions">
+            <a asp-action="Detail" asp-route-id="@Model.Id" class="btn btn-primary">Xem chi tiết booking</a>
+            <a asp-action="MyBookings" class="btn btn-outline">Tất cả booking</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,203 @@
+@model List<ResortBookingMVC.Models.Booking>
+@using ResortBookingMVC.Models.Enums
+@{
+    ViewData["Title"] = "Quản lý Booking";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+}
+
+<!-- Header -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+    <div>
+        <div style="font-size:0.72rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Quản lý</div>
+        <h2 style="font-size:1.3rem;font-weight:800;color:#0f172a;margin:0;">Danh sách Booking</h2>
+    </div>
+</div>
+
+<!-- Filter bar -->
+<form asp-action="Bookings" method="get" class="abk-filter">
+    <div class="abk-search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <input type="text" name="search" value="@ViewBag.Search"
+               placeholder="Tìm mã booking, tên khách..." class="abk-search" />
+    </div>
+    <select name="status" class="abk-select" onchange="this.form.submit()">
+        <option value="">Tất cả trạng thái</option>
+        @foreach (var s in Enum.GetNames<BookingStatus>())
+        {
+            <option value="@s" selected="@(ViewBag.Status == s ? "selected" : null)">@s</option>
+        }
+    </select>
+    <button type="submit" class="abk-btn-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+        </svg>
+        Tìm kiếm
+    </button>
+</form>
+
+<!-- Table card -->
+<div class="abk-card">
+    <div style="overflow-x:auto;">
+        <table class="abk-table">
+            <thead>
+                <tr>
+                    <th>Mã booking</th>
+                    <th>Khách hàng</th>
+                    <th>Resort</th>
+                    <th>Ngày lưu trú</th>
+                    <th>Phòng / Khách</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    string badgeClass = b.Status switch
+                    {
+                        BookingStatus.Pending => "abk-s-pending",
+                        BookingStatus.Confirmed => "abk-s-confirmed",
+                        BookingStatus.CheckedIn => "abk-s-checkedin",
+                        BookingStatus.Completed => "abk-s-completed",
+                        BookingStatus.Cancelled => "abk-s-cancelled",
+                        BookingStatus.Rejected => "abk-s-rejected",
+                        _ => "abk-s-default"
+                    };
+                    string statusLabel = b.Status switch
+                    {
+                        BookingStatus.Pending => "Chờ xác nhận",
+                        BookingStatus.Confirmed => "Đã xác nhận",
+                        BookingStatus.CheckedIn => "Đã check-in",
+                        BookingStatus.Completed => "Hoàn thành",
+                        BookingStatus.Cancelled => "Đã hủy",
+                        BookingStatus.Rejected => "Từ chối",
+                        _ => b.Status.ToString()
+                    };
+
+                    <tr>
+                        <td>
+                            <span class="abk-code">#@b.BookingCode</span>
+                        </td>
+                        <td>
+                            <div class="abk-guest">
+                                <div class="abk-avatar">@(b.User?.FullName?.Length > 0 ? b.User.FullName[0].ToString().ToUpper() : "?")</div>
+                                <div>
+                                    <div class="abk-guest-name">@b.User?.FullName</div>
+                                    <div class="abk-guest-email">@b.User?.Email</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="abk-resort-name">@b.Resort?.Name</td>
+                        <td>
+                            <div class="abk-dates">
+                                <span>@b.CheckInDate.ToString("dd/MM/yyyy")</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                     stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                                <span>@b.CheckOutDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="abk-nights">@b.TotalNights đêm</div>
+                        </td>
+                        <td>
+                            <div class="abk-rooms">@b.NumRooms phòng</div>
+                            <div class="abk-guests-count">@b.NumAdults người lớn · @b.NumChildren trẻ em</div>
+                        </td>
+                        <td class="abk-amount">@b.TotalAmount.ToString("N0")đ</td>
+                        <td>
+                            <span class="abk-status @badgeClass">@statusLabel</span>
+                        </td>
+                        <td>
+                            <div class="abk-actions">
+                                @if (b.Status == BookingStatus.Pending)
+                                {
+                                    <form asp-action="ConfirmBooking" asp-route-id="@b.Id" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button class="abk-btn abk-btn-confirm" title="Xác nhận">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2.5"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
+                                            Xác nhận
+                                        </button>
+                                    </form>
+                                    <form asp-action="RejectBooking" asp-route-id="@b.Id" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="reason" value="Không phù hợp" />
+                                        <button class="abk-btn abk-btn-reject" title="Từ chối">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2.5"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <path d="M15 9l-6 6M9 9l6 6" />
+                                            </svg>
+                                            Từ chối
+                                        </button>
+                                    </form>
+                                }
+                                @if (b.Status == BookingStatus.Confirmed)
+                                {
+                                    <form asp-action="CheckInBooking" asp-route-id="@b.Id" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button class="abk-btn abk-btn-checkin">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2.5"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" />
+                                                <polyline points="10 17 15 12 10 7" />
+                                                <line x1="15" y1="12" x2="3" y2="12" />
+                                            </svg>
+                                            Check-in
+                                        </button>
+                                    </form>
+                                }
+                                @if (b.Status == BookingStatus.CheckedIn)
+                                {
+                                    <form asp-action="CheckOutBooking" asp-route-id="@b.Id" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button class="abk-btn abk-btn-checkout">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2.5"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                                                <polyline points="16 17 21 12 16 7" />
+                                                <line x1="21" y1="12" x2="9" y2="12" />
+                                            </svg>
+                                            Check-out
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    @if ((int)ViewBag.TotalPages > 1)
+    {
+        <div class="abk-pagination">
+            @for (int p = 1; p <= (int)ViewBag.TotalPages; p++)
+            {
+                <a asp-action="Bookings"
+                   asp-route-page="@p"
+                   asp-route-status="@ViewBag.Status"
+                   class="abk-page @(p == (int)ViewBag.Page ? "active" : "")">@p</a>
+            }
+        </div>
+    }
+</div>
