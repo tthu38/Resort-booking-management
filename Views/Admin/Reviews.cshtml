@@ -2,38 +2,146 @@
 @{
     ViewData["Title"] = "Quản lý đánh giá";
     Layout = "_AdminLayout";
+    ViewData["HeaderSection"] = "Quản lý";
+    ViewData["HeaderTitle"] = "Đánh giá khách hàng";
 }
 
-<div class="admin-page-header">
-    <h2 class="admin-page-title">⭐ Quản lý đánh giá</h2>
-</div>
-<div class="admin-card">
-    <div class="table-responsive">
-        <table class="admin-table">
-            <thead><tr><th>Khách hàng</th><th>Resort</th><th>Sao</th><th>Nội dung</th><th>Ngày</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+}
+
+<partial name="_AdminPageHeader" />
+
+<!-- Table card -->
+<div class="abk-card">
+    <div style="overflow-x:auto;">
+        <table class="abk-table">
+            <thead>
+                <tr>
+                    <th>Khách hàng</th>
+                    <th>Resort</th>
+                    <th>Sao</th>
+                    <th>Nội dung</th>
+                    <th>Ngày</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
             <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7">
+                            <div style="text-align:center;padding:2.5rem;color:#94a3b8;">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                     stroke="#e2e8f0" stroke-width="1.5"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     style="display:block;margin:0 auto 0.75rem;">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                </svg>
+                                Chưa có đánh giá nào
+                            </div>
+                        </td>
+                    </tr>
+                }
                 @foreach (var r in Model)
                 {
                     <tr>
-                        <td>@r.User?.FullName</td>
-                        <td>@r.Resort?.Name</td>
-                        <td>@string.Concat(Enumerable.Repeat("★", r.Rating))</td>
-                        <td><small>@(r.Comment?.Length > 80 ? r.Comment[..80] + "..." : r.Comment)</small></td>
-                        <td>@r.CreatedAt.ToString("dd/MM/yyyy")</td>
-                        <td><span class="badge @(r.IsApproved ? "badge-success" : "badge-warning")">@(r.IsApproved ? "Hiển thị" : "Chờ duyệt")</span></td>
-                        <td class="action-btns">
-                            @if (!r.IsApproved)
-                            {
-                                <form asp-action="ApproveReview" asp-route-id="@r.Id" method="post">
+                        <!-- Khách hàng -->
+                        <td>
+                            <div class="abk-guest">
+                                <div class="abk-avatar">
+                                    @(r.User?.FullName?.Length > 0 ? r.User.FullName[0].ToString().ToUpper() : "?")
+                                </div>
+                                <div>
+                                    <div class="abk-guest-name">@r.User?.FullName</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Resort -->
+                        <td>
+                            <div style="font-size:0.8rem;font-weight:500;color:#0f172a;max-width:140px;">
+                                @r.Resort?.Name
+                            </div>
+                        </td>
+
+                        <!-- Sao -->
+                        <td>
+                            <div style="display:flex;align-items:center;gap:2px;">
+                                @for (int s = 0; s < r.Rating; s++)
+                                {
+                                    <svg width="12" height="12" viewBox="0 0 24 24"
+                                         fill="#f59e0b" stroke="#f59e0b" stroke-width="1">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                    </svg>
+                                }
+                                @for (int s = r.Rating; s < 5; s++)
+                                {
+                                    <svg width="12" height="12" viewBox="0 0 24 24"
+                                         fill="none" stroke="#e2e8f0" stroke-width="1.5">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                    </svg>
+                                }
+                                <span style="font-size:0.72rem;font-weight:700;color:#64748b;margin-left:4px;">@r.Rating/5</span>
+                            </div>
+                        </td>
+
+                        <!-- Nội dung -->
+                        <td style="max-width:220px;">
+                            <div style="font-size:0.8rem;color:#475569;line-height:1.5;">
+                                @(r.Comment?.Length > 90 ? r.Comment[..90] + "…" : r.Comment)
+                            </div>
+                        </td>
+
+                        <!-- Ngày -->
+                        <td>
+                            <div style="font-size:0.8rem;color:#374151;white-space:nowrap;">
+                                @r.CreatedAt.ToString("dd/MM/yyyy")
+                            </div>
+                        </td>
+
+                        <!-- Trạng thái -->
+                        <td>
+                            <span class="abk-status @(r.IsApproved ? "abk-s-confirmed" : "abk-s-pending")">
+                                @(r.IsApproved ? "Hiển thị" : "Chờ duyệt")
+                            </span>
+                        </td>
+
+                        <!-- Hành động -->
+                        <td>
+                            <div class="abk-actions">
+                                @if (!r.IsApproved)
+                                {
+                                    <form asp-action="ApproveReview" asp-route-id="@r.Id" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button class="abk-btn abk-btn-confirm">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2.5"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
+                                            Duyệt
+                                        </button>
+                                    </form>
+                                }
+                                <form asp-action="DeleteReview" asp-route-id="@r.Id" method="post"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Xác nhận xóa đánh giá này?')">
                                     @Html.AntiForgeryToken()
-                                    <button class="btn btn-sm btn-success">✔ Duyệt</button>
+                                    <button class="abk-btn abk-btn-reject">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6" />
+                                            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                                            <path d="M10 11v6M14 11v6" />
+                                            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                                        </svg>
+                                        Xóa
+                                    </button>
                                 </form>
-                            }
-                            <form asp-action="DeleteReview" asp-route-id="@r.Id" method="post"
-                                  onsubmit="return confirm('Xóa đánh giá này?')">
-                                @Html.AntiForgeryToken()
-                                <button class="btn btn-sm btn-danger">🗑 Xóa</button>
-                            </form>
+                            </div>
                         </td>
                     </tr>
                 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResortBookingMVC.Data;
+using ResortBookingMVC.Interfaces;
 using ResortBookingMVC.Models;
 using ResortBookingMVC.Models.Enums;
 using ResortBookingMVC.ViewModels;
@@ -13,11 +14,13 @@ namespace ResortBookingMVC.Controllers
     public class BookingController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IEmailService _emailService;
         private long CurrentUserId => long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        public BookingController(AppDbContext context)
+        public BookingController(AppDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: /Booking/Create
@@ -43,6 +46,9 @@ namespace ResortBookingMVC.Controllers
             if (resort == null || roomType == null)
                 return NotFound();
 
+            // Load thông tin user từ DB
+            var user = await _context.Users.FindAsync(CurrentUserId);
+
             int totalNights = checkOutDate.DayNumber - checkInDate.DayNumber;
             decimal subTotal = roomType.BasePricePerNight * totalNights * rooms;
             decimal deposit = Math.Round(subTotal * (roomType.DepositPercentage / 100m), 0);
@@ -61,7 +67,11 @@ namespace ResortBookingMVC.Controllers
                 Services = resort.Services.ToList(),
                 TotalNights = totalNights,
                 EstimatedTotal = subTotal,
-                DepositAmount = deposit
+                DepositAmount = deposit,
+                // ── Load từ profile user ──
+                GuestFullName = user?.FullName ?? "",
+                GuestEmail = user?.Email ?? "",
+                GuestPhone = user?.PhoneNumber ?? ""
             };
 
             return View(vm);
@@ -178,6 +188,33 @@ namespace ResortBookingMVC.Controllers
 
             await _context.SaveChangesAsync();
 
+            // Gửi email xác nhận
+            try
+            {
+                var user = await _context.Users.FindAsync(CurrentUserId);
+                if (user != null)
+                {
+                    var resort = await _context.Resorts
+                        .Include(r => r.Location)
+                        .FirstOrDefaultAsync(r => r.Id == model.ResortId);
+
+                    await _emailService.SendBookingConfirmationAsync(
+                        toEmail: user.Email,
+                        toName: user.FullName,
+                        bookingCode: booking.BookingCode,
+                        resortName: resort?.Name ?? "",
+                        location: resort?.Location?.Province ?? "",
+                        checkIn: checkInDate.ToString("dd/MM/yyyy"),
+                        checkOut: checkOutDate.ToString("dd/MM/yyyy"),
+                        nights: totalNights,
+                        rooms: model.NumRooms,
+                        total: totalAmount.ToString("N0"),
+                        deposit: depositAmount.ToString("N0")
+                    );
+                }
+            }
+            catch { /* Không để lỗi email chặn flow đặt phòng */ }
+
             TempData["BookingCode"] = booking.BookingCode;
             return RedirectToAction("Success", new { id = booking.Id });
         }
@@ -255,7 +292,7 @@ namespace ResortBookingMVC.Controllers
             return RedirectToAction("MyBookings");
         }
 
-        // GET: /Booking/Review/5
+        // GET: /Booking/WriteReview
         public async Task<IActionResult> WriteReview(long id)
         {
             var booking = await _context.Bookings
@@ -264,11 +301,13 @@ namespace ResortBookingMVC.Controllers
                 .FirstOrDefaultAsync(b => b.Id == id && b.UserId == CurrentUserId);
 
             if (booking == null) return NotFound();
+
             if (booking.Status != BookingStatus.Completed)
             {
                 TempData["Error"] = "Chỉ có thể đánh giá sau khi hoàn thành.";
                 return RedirectToAction("Detail", new { id });
             }
+
             if (booking.Review != null)
             {
                 TempData["Error"] = "Bạn đã đánh giá booking này rồi.";
@@ -293,14 +332,28 @@ namespace ResortBookingMVC.Controllers
             return RedirectToAction("Detail", new { id = model.BookingId });
         }
 
+        // ── Helper ──
         private async Task<IActionResult> ReloadCreateView(CreateBookingViewModel model)
         {
             model.Resort = await _context.Resorts
                 .Include(r => r.Location)
                 .Include(r => r.Services.Where(s => s.IsActive))
                 .FirstOrDefaultAsync(r => r.Id == model.ResortId);
-            model.RoomType = await _context.RoomTypes.Include(rt => rt.Images).FirstOrDefaultAsync(rt => rt.Id == model.RoomTypeId);
+            model.RoomType = await _context.RoomTypes
+                .Include(rt => rt.Images)
+                .FirstOrDefaultAsync(rt => rt.Id == model.RoomTypeId);
             model.Services = model.Resort?.Services?.ToList() ?? new();
+
+            // Reload thông tin user nếu trống
+            if (string.IsNullOrEmpty(model.GuestFullName) ||
+                string.IsNullOrEmpty(model.GuestEmail))
+            {
+                var user = await _context.Users.FindAsync(CurrentUserId);
+                model.GuestFullName = user?.FullName ?? "";
+                model.GuestEmail = user?.Email ?? "";
+                model.GuestPhone = user?.PhoneNumber ?? "";
+            }
+
             return View(model);
         }
 

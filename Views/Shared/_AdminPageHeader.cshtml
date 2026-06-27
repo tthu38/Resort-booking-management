@@ -1,0 +1,59 @@
+﻿@{
+    var hSection = ViewData["HeaderSection"] as string ?? "";
+    var hTitle = ViewData["HeaderTitle"] as string ?? "";
+    var hBtnUrl = ViewData["HeaderBtnUrl"] as string ?? "";
+    var hBtnLabel = ViewData["HeaderBtnLabel"] as string ?? "";
+    var hBtnIcon = ViewData["HeaderBtnIcon"] as string ?? "add";
+    var hBackUrl = ViewData["HeaderBackUrl"] as string ?? "";
+}
+
+<div class="aph-wrap">
+    <div>
+        @if (!string.IsNullOrEmpty(hSection))
+        {
+            <div class="aph-section">@hSection</div>
+        }
+        <h2 class="aph-title">@hTitle</h2>
+    </div>
+
+    @if (!string.IsNullOrEmpty(hBtnUrl) || !string.IsNullOrEmpty(hBackUrl))
+    {
+        <div class="aph-actions">
+            @if (!string.IsNullOrEmpty(hBtnUrl) && !string.IsNullOrEmpty(hBtnLabel))
+            {
+                <a href="@hBtnUrl" class="@(hBtnIcon == "back" ? "af-btn-back" : "ar-btn-add")">
+                    @if (hBtnIcon == "back")
+                    {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    }
+                    else
+                    {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                    }
+                    @hBtnLabel
+                </a>
+            }
+
+            @if (!string.IsNullOrEmpty(hBackUrl))
+            {
+                <a href="@hBackUrl" class="af-btn-back">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                    Quay lại
+                </a>
+            }
+        </div>
+    }
+</div>

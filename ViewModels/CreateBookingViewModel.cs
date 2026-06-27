@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using ResortBookingMVC.Models;
 
 namespace ResortBookingMVC.ViewModels
@@ -15,7 +15,21 @@ namespace ResortBookingMVC.ViewModels
         public string PaymentType { get; set; } = "Deposit";
         public string? SpecialRequest { get; set; }
         public List<int> SelectedServiceIds { get; set; } = new();
-        // Display
+
+        // ── Thông tin khách ──
+        [Required(ErrorMessage = "Vui lòng nhập họ và tên")]
+        [MaxLength(100)]
+        public string GuestFullName { get; set; } = null!;
+
+        [Required(ErrorMessage = "Vui lòng nhập email")]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        public string GuestEmail { get; set; } = null!;
+
+        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
+        [Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
+        public string GuestPhone { get; set; } = null!;
+
+        // ── Display ──
         public Resort? Resort { get; set; }
         public RoomType? RoomType { get; set; }
         public List<Service> Services { get; set; } = new();

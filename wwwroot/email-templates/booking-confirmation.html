@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xác nhận đặt phòng</title>
+</head>
+<body style="font-family:'Segoe UI',sans-serif;background:#f8fafc;margin:0;padding:0;">
+    <div style="max-width:520px;margin:40px auto;background:#fff;border-radius:16px;
+              border:1px solid #e2e8f0;overflow:hidden;">
+
+        <!-- Header -->
+        <div style="background:rgb(45,212,191);padding:2rem;text-align:center;">
+            <h1 style="color:#fff;margin:0;font-size:1.4rem;font-weight:800;">HolidayBooking</h1>
+            <p style="color:rgba(255,255,255,0.88);margin:6px 0 0;font-size:0.9rem;">Xác nhận đặt phòng</p>
+        </div>
+
+        <!-- Body -->
+        <div style="padding:2rem 2.5rem;">
+            <p style="color:#374151;font-size:0.95rem;margin:0 0 0.5rem;">
+                Xin chào <strong>{{NAME}}</strong>,
+            </p>
+            <p style="color:#64748b;font-size:0.875rem;line-height:1.6;margin:0 0 1.5rem;">
+                Chúng tôi đã nhận được yêu cầu đặt phòng của bạn. Booking đang chờ xác nhận — chúng tôi sẽ liên hệ trong vòng 24 giờ.
+            </p>
+
+            <!-- Booking Code -->
+            <div style="background:#f0fdfb;border:2px dashed rgba(45,212,191,0.4);
+                  border-radius:12px;padding:1.25rem;text-align:center;margin-bottom:1.5rem;">
+                <p style="color:#94a3b8;font-size:0.75rem;font-weight:600;text-transform:uppercase;
+                  letter-spacing:0.5px;margin:0 0 6px;">Mã booking</p>
+                <div style="font-size:1.4rem;font-weight:800;letter-spacing:3px;
+                    color:rgb(15,150,130);font-family:monospace;">{{BOOKING_CODE}}</div>
+            </div>
+
+            <!-- Details -->
+            <table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-bottom:1.5rem;">
+                <tr>
+                    <td style="padding:0.5rem 0;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Resort</td>
+                    <td style="padding:0.5rem 0;text-align:right;font-weight:600;color:#0f172a;border-bottom:1px solid #f1f5f9;">{{RESORT_NAME}}</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.5rem 0;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Địa điểm</td>
+                    <td style="padding:0.5rem 0;text-align:right;font-weight:600;color:#0f172a;border-bottom:1px solid #f1f5f9;">{{LOCATION}}</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.5rem 0;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Nhận phòng</td>
+                    <td style="padding:0.5rem 0;text-align:right;font-weight:600;color:#0f172a;border-bottom:1px solid #f1f5f9;">{{CHECK_IN}}</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.5rem 0;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Trả phòng</td>
+                    <td style="padding:0.5rem 0;text-align:right;font-weight:600;color:#0f172a;border-bottom:1px solid #f1f5f9;">{{CHECK_OUT}}</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.5rem 0;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Số đêm</td>
+                    <td style="padding:0.5rem 0;text-align:right;font-weight:600;color:#0f172a;border-bottom:1px solid #f1f5f9;">{{NIGHTS}} đêm</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.5rem 0;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Số phòng</td>
+                    <td style="padding:0.5rem 0;text-align:right;font-weight:600;color:#0f172a;border-bottom:1px solid #f1f5f9;">{{ROOMS}} phòng</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.75rem 0 0.5rem;color:#0f172a;font-weight:600;">Tổng tiền</td>
+                    <td style="padding:0.75rem 0 0.5rem;text-align:right;font-weight:800;font-size:1rem;color:rgb(45,212,191);">{{TOTAL}}đ</td>
+                </tr>
+                <tr>
+                    <td style="padding:0.25rem 0;color:#374151;font-weight:600;">Cần thanh toán ngay</td>
+                    <td style="padding:0.25rem 0;text-align:right;font-weight:700;color:rgb(15,150,130);">{{DEPOSIT}}đ</td>
+                </tr>
+            </table>
+
+            <p style="color:#94a3b8;font-size:0.8rem;line-height:1.6;margin:0;">
+                Nếu bạn có thắc mắc, vui lòng liên hệ chúng tôi qua email hoặc hotline.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background:#f8fafc;padding:1rem 2.5rem;border-top:1px solid #e2e8f0;text-align:center;">
+            <p style="color:#cbd5e1;font-size:0.75rem;margin:0;">
+                © {{YEAR}} HolidayBooking. All rights reserved.
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>

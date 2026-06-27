@@ -3,28 +3,31 @@
     ViewData["Title"] = "Loại phòng";
     Layout = "_AdminLayout";
     var resort = ViewBag.Resort as ResortBookingMVC.Models.Resort;
+    ViewData["HeaderSection"] = "Quản lý Resort";
+    ViewData["HeaderTitle"] = $"Loại phòng — {resort?.Name}";
+    ViewData["HeaderBtnUrl"] = Url.Action("CreateRoomType", new { resortId = resort?.Id });
+    ViewData["HeaderBtnLabel"] = "Thêm loại phòng";
+    ViewData["HeaderBtnIcon"] = "add";
+    ViewData["HeaderBackUrl"] = Url.Action("Resorts");
 }
 
-<div class="admin-page-header">
-    <div>
-        <h2 class="admin-page-title">🛏 Loại phòng — @resort?.Name</h2>
-    </div>
-    <div style="display:flex;gap:10px;">
-        <a asp-action="CreateRoomType" asp-route-resortId="@resort?.Id" class="btn btn-primary">+ Thêm loại phòng</a>
-        <a asp-action="Resorts" class="btn btn-outline">← Quay lại</a>
-    </div>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+}
 
-<div class="admin-card">
-    <div class="table-responsive">
-        <table class="admin-table">
+<partial name="_AdminPageHeader" />
+
+<!-- Table card -->
+<div class="abk-card">
+    <div style="overflow-x:auto;">
+        <table class="abk-table">
             <thead>
                 <tr>
-                    <th>Tên loại phòng</th>
+                    <th>Loại phòng</th>
                     <th>Sức chứa</th>
                     <th>Diện tích</th>
                     <th>Loại giường</th>
-                    <th>Giá/đêm</th>
+                    <th>Giá / đêm</th>
                     <th>Đặt cọc</th>
                     <th>Số phòng</th>
                     <th>Trạng thái</th>
@@ -33,27 +36,124 @@
             <tbody>
                 @if (!Model.Any())
                 {
-                    <tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:30px;">Chưa có loại phòng nào</td></tr>
+                    <tr>
+                        <td colspan="8">
+                            <div style="text-align:center;padding:2.5rem;color:#94a3b8;">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                     stroke="#e2e8f0" stroke-width="1.5"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     style="display:block;margin:0 auto 0.75rem;">
+                                    <path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" />
+                                    <path d="M2 11h20v9a2 2 0 01-2 2H4a2 2 0 01-2-2v-9z" />
+                                </svg>
+                                Chưa có loại phòng nào
+                            </div>
+                        </td>
+                    </tr>
                 }
                 @foreach (var rt in Model)
                 {
                     <tr>
+                        <!-- Tên + mô tả -->
                         <td>
-                            <strong>@rt.Name</strong>
+                            <div style="font-size:0.875rem;font-weight:700;color:#0f172a;margin-bottom:2px;">
+                                @rt.Name
+                            </div>
                             @if (!string.IsNullOrEmpty(rt.Description))
                             {
-                                <br/><small style="color:#94a3b8;">@(rt.Description.Length > 60 ? rt.Description[..60] + "..." : rt.Description)</small>
+                                <div style="font-size:0.72rem;color:#94a3b8;line-height:1.4;">
+                                    @(rt.Description.Length > 65 ? rt.Description[..65] + "…" : rt.Description)
+                                </div>
                             }
                         </td>
-                        <td>@rt.MaxAdults NL + @rt.MaxChildren TE</td>
-                        <td>@(rt.AreaSqm.HasValue ? rt.AreaSqm + " m²" : "—")</td>
-                        <td>@(rt.BedType ?? "—")</td>
-                        <td style="color:#0ea5e9;font-weight:700;">@rt.BasePricePerNight.ToString("N0")đ</td>
-                        <td>@rt.DepositPercentage%</td>
-                        <td><span class="badge badge-info">@rt.Rooms?.Count phòng</span></td>
+
+                        <!-- Sức chứa -->
                         <td>
-                            <span class="badge @(rt.IsActive ? "badge-success" : "badge-danger")">
-                                @(rt.IsActive ? "Active" : "Ẩn")
+                            <div style="display:flex;align-items:center;gap:5px;font-size:0.8rem;color:#374151;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                     stroke="#94a3b8" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                </svg>
+                                @rt.MaxAdults NL · @rt.MaxChildren TE
+                            </div>
+                        </td>
+
+                        <!-- Diện tích -->
+                        <td>
+                            @if (rt.AreaSqm.HasValue)
+                            {
+                                <div style="display:flex;align-items:center;gap:4px;font-size:0.8rem;color:#374151;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                         stroke="#94a3b8" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="15 3 21 3 21 9" />
+                                        <polyline points="9 21 3 21 3 15" />
+                                        <line x1="21" y1="3" x2="14" y2="10" />
+                                        <line x1="3" y1="21" x2="10" y2="14" />
+                                    </svg>
+                                    @rt.AreaSqm m²
+                                </div>
+                            }
+                            else
+                            {
+                                <span style="color:#cbd5e1;font-size:0.8rem;">—</span>
+                            }
+                        </td>
+
+                        <!-- Loại giường -->
+                        <td>
+                            @if (!string.IsNullOrEmpty(rt.BedType))
+                            {
+                                <div style="display:flex;align-items:center;gap:5px;font-size:0.8rem;color:#374151;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                         stroke="#94a3b8" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" />
+                                        <path d="M2 11h20v9a2 2 0 01-2 2H4a2 2 0 01-2-2v-9z" />
+                                    </svg>
+                                    @rt.BedType
+                                </div>
+                            }
+                            else
+                            {
+                                <span style="color:#cbd5e1;font-size:0.8rem;">—</span>
+                            }
+                        </td>
+
+                        <!-- Giá -->
+                        <td>
+                            <div style="font-size:0.875rem;font-weight:800;color:rgb(15,150,130);">
+                                @rt.BasePricePerNight.ToString("N0")đ
+                            </div>
+                            <div style="font-size:0.7rem;color:#94a3b8;">/đêm</div>
+                        </td>
+
+                        <!-- Đặt cọc -->
+                        <td>
+                            <div style="display:inline-block;padding:2px 9px;background:#f1f5f9;border-radius:20px;font-size:0.72rem;font-weight:700;color:#64748b;">
+                                @rt.DepositPercentage%
+                            </div>
+                        </td>
+
+                        <!-- Số phòng -->
+                        <td>
+                            <div style="display:inline-flex;align-items:center;gap:5px;padding:2px 9px;background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.2);border-radius:20px;font-size:0.72rem;font-weight:700;color:rgb(15,150,130);">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2.5"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                                </svg>
+                                @rt.Rooms?.Count phòng
+                            </div>
+                        </td>
+
+                        <!-- Trạng thái -->
+                        <td>
+                            <span class="abk-status @(rt.IsActive ? "abk-s-confirmed" : "abk-s-cancelled")">
+                                @(rt.IsActive ? "Hoạt động" : "Đã ẩn")
                             </span>
                         </td>
                     </tr>

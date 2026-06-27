@@ -1,0 +1,97 @@
+﻿@model ResortBookingMVC.ViewModels.VerifyOtpViewModel
+@{
+    ViewData["Title"] = "Nhập mã OTP";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/forgotPassword.css" asp-append-version="true" />
+}
+
+<div class="auth-page">
+    <div class="auth-bg">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=90&auto=format&fit=crop" alt="Beach resort" />
+        <div class="auth-bg-overlay"></div>
+    </div>
+
+    <div class="auth-card">
+        <div class="auth-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="rgb(45,212,191)" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+            </svg>
+        </div>
+
+        <!-- Step indicator -->
+        <div class="fp-steps">
+            <div class="fp-step done">
+                <div class="fp-step-circle">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                </div>
+                <div class="fp-step-label">Email</div>
+            </div>
+            <div class="fp-step-line done"></div>
+            <div class="fp-step active">
+                <div class="fp-step-circle">2</div>
+                <div class="fp-step-label">OTP</div>
+            </div>
+            <div class="fp-step-line"></div>
+            <div class="fp-step">
+                <div class="fp-step-circle">3</div>
+                <div class="fp-step-label">Mật khẩu</div>
+            </div>
+        </div>
+
+        <h2>Nhập mã OTP</h2>
+
+        <div class="fp-info">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            Mã 6 chữ số đã gửi đến
+            <span class="fp-email-highlight">@Model.Email</span>
+        </div>
+
+        <form asp-action="VerifyOtp" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Email" />
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="form-group">
+                <label asp-for="Otp">Mã OTP</label>
+                <input asp-for="Otp" class="otp-input"
+                       placeholder="• • • • • •"
+                       maxlength="6" autocomplete="one-time-code" inputmode="numeric" />
+                <span asp-validation-for="Otp" class="field-error"></span>
+            </div>
+
+            <button type="submit" class="btn-primary-full">Xác nhận OTP</button>
+        </form>
+
+        <p class="fp-resend">
+            Chưa nhận được mã?
+            <a asp-action="ForgotPassword">Gửi lại</a>
+        </p>
+    </div>
+
+    <div class="auth-brand">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M1 11 Q4.5 2 8 7 Q11.5 12 15 5" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" fill="none" />
+            <circle cx="8" cy="13.5" r="1.8" fill="rgb(45,212,191)" />
+        </svg>
+        HolidayBooking
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScripts" />
+    <script>
+        document.querySelector('.otp-input')?.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 6);
+        });
+    </script>
+}

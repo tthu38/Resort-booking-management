@@ -1,36 +1,47 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 using ResortBookingMVC.Data;
+using ResortBookingMVC.Interfaces;
+using ResortBookingMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add MVC
 builder.Services.AddControllersWithViews();
 
-// Add DbContext - SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath        = "/Auth/Login";
-        options.LogoutPath       = "/Auth/Logout";
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
         options.AccessDeniedPath = "/Auth/AccessDenied";
-        options.ExpireTimeSpan   = TimeSpan.FromDays(7);
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
         options.SlidingExpiration = true;
-        options.Cookie.HttpOnly  = true;
+        options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        options.CallbackPath = "/signin-google";
+        // Lấy thêm email
+        options.Scope.Add("email");
+        options.Scope.Add("profile");
     });
 
 builder.Services.AddAuthorization();
 
-// Session (dùng cho thông báo tạm)
+// Email Service
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 builder.Services.AddSession(opt =>
 {
-    opt.IdleTimeout        = TimeSpan.FromMinutes(30);
-    opt.Cookie.HttpOnly    = true;
+    opt.IdleTimeout = TimeSpan.FromMinutes(30);
+    opt.Cookie.HttpOnly = true;
     opt.Cookie.IsEssential = true;
 });
 
@@ -49,22 +60,8 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    var users = db.Users.ToList();
-//    foreach (var u in users)
-//    {
-//        u.PasswordHash = BCrypt.Net.BCrypt.HashPassword("123456");
-//    }
-//    db.SaveChanges();
-//}
-
-//app.Run();
 
 app.Run();

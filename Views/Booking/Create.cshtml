@@ -3,11 +3,29 @@
     ViewData["Title"] = "Xác nhận đặt phòng";
 }
 
-<div class="booking-page container">
-    <h1 class="page-title">🏨 Xác nhận đặt phòng</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+}
+
+<div class="booking-page">
+
+    <!-- Header -->
+    <div class="booking-page-header">
+        <a asp-controller="Resort" asp-action="Detail"
+           asp-route-id="@Model.ResortId" class="back-link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+            </svg>
+            Quay lại resort
+        </a>
+        <h1>Xác nhận đặt phòng</h1>
+    </div>
 
     <div class="booking-layout">
-        <!-- FORM -->
+
+        <!-- LEFT: Form -->
         <div class="booking-form-section">
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
@@ -21,26 +39,80 @@
 
                 <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
-                <!-- Guest Info -->
-                <div class="form-card">
-                    <h3>👤 Thông tin khách</h3>
-                    <p>Thông tin sẽ lấy từ tài khoản của bạn. Bạn có thể cập nhật tại <a asp-controller="Auth" asp-action="Profile">hồ sơ</a>.</p>
-                </div>
+                <!-- Thông tin khách -->
+                <div class="bk-card">
+                    <div class="bk-card-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        Thông tin khách
+                    </div>
 
-                <!-- Special Request -->
-                <div class="form-card">
-                    <h3>📝 Yêu cầu đặc biệt</h3>
-                    <div class="form-group">
-                        <textarea asp-for="SpecialRequest" class="form-control" rows="3"
-                                  placeholder="VD: phòng tầng cao, giường đôi, đặt sớm, v.v..."></textarea>
+                    <div class="profile-hint">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        Thông tin lấy từ tài khoản của bạn.
+                        Cập nhật tại <a asp-controller="Auth" asp-action="EditProfile">hồ sơ</a> nếu cần.
+                    </div>
+
+                    <div class="guest-grid">
+                        <div class="bk-field full">
+                            <label asp-for="GuestFullName">Họ và tên</label>
+                            <input asp-for="GuestFullName" placeholder="Nguyễn Văn A" />
+                            <span asp-validation-for="GuestFullName" class="field-error"></span>
+                        </div>
+                        <div class="bk-field">
+                            <label asp-for="GuestEmail">Email</label>
+                            <input asp-for="GuestEmail" type="email" placeholder="your@email.com" />
+                            <span asp-validation-for="GuestEmail" class="field-error"></span>
+                        </div>
+                        <div class="bk-field">
+                            <label asp-for="GuestPhone">Số điện thoại</label>
+                            <input asp-for="GuestPhone" type="tel" placeholder="09xxxxxxxx" />
+                            <span asp-validation-for="GuestPhone" class="field-error"></span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Services -->
+                <!-- Yêu cầu đặc biệt -->
+                <div class="bk-card">
+                    <div class="bk-card-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                        Yêu cầu đặc biệt
+                    </div>
+                    <div class="bk-field">
+                        <textarea asp-for="SpecialRequest" rows="3"
+                                  placeholder="VD: phòng tầng cao, giường đôi, đón sân bay..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Dịch vụ thêm -->
                 @if (Model.Services.Any())
                 {
-                    <div class="form-card">
-                        <h3>🛎 Dịch vụ thêm</h3>
+                    <div class="bk-card">
+                        <div class="bk-card-title">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            Dịch vụ thêm
+                        </div>
                         @foreach (var svc in Model.Services)
                         {
                             <div class="service-option">
@@ -54,58 +126,108 @@
                     </div>
                 }
 
-                <!-- Payment Type -->
-                <div class="form-card">
-                    <h3>💳 Hình thức thanh toán</h3>
+                <!-- Hình thức thanh toán -->
+                <div class="bk-card">
+                    <div class="bk-card-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="5" width="20" height="14" rx="2" />
+                            <line x1="2" y1="10" x2="22" y2="10" />
+                        </svg>
+                        Hình thức thanh toán
+                    </div>
                     <div class="payment-options">
                         <label class="payment-opt">
                             <input type="radio" asp-for="PaymentType" value="Deposit" checked="checked" />
                             <div class="payment-opt-box">
                                 <strong>Đặt cọc @Model.RoomType?.DepositPercentage%</strong>
-                                <span>Thanh toán <strong>@Model.DepositAmount.ToString("N0")đ</strong> ngay</span>
+                                <span>Thanh toán <strong>@Model.DepositAmount.ToString("N0")đ</strong> ngay, phần còn lại khi nhận phòng</span>
                             </div>
                         </label>
                         <label class="payment-opt">
                             <input type="radio" asp-for="PaymentType" value="FullPayment" />
                             <div class="payment-opt-box">
                                 <strong>Thanh toán toàn bộ</strong>
-                                <span>Thanh toán <strong>@Model.EstimatedTotal.ToString("N0")đ</strong> ngay</span>
+                                <span>Thanh toán <strong>@Model.EstimatedTotal.ToString("N0")đ</strong> ngay một lần</span>
                             </div>
                         </label>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-full btn-lg">
-                    ✅ Xác nhận đặt phòng
+                <!-- Submit -->
+                <button type="submit" class="btn-book-submit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Xác nhận đặt phòng
                 </button>
             </form>
         </div>
 
-        <!-- SUMMARY -->
-        <div class="booking-summary">
+        <!-- RIGHT: Summary -->
+        <div>
             <div class="summary-card">
-                <h3>📋 Tóm tắt đặt phòng</h3>
+                <div class="bk-card-title" style="margin-bottom:1rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+                        <rect x="9" y="3" width="6" height="4" rx="1" />
+                    </svg>
+                    Tóm tắt đặt phòng
+                </div>
 
                 @if (Model.Resort != null)
                 {
-                    <div class="summary-resort">
-                        <strong>@Model.Resort.Name</strong>
-                        <span><i class="fa fa-map-marker-alt"></i> @Model.Resort.Location?.Province</span>
+                    <div class="summary-resort-name">@Model.Resort.Name</div>
+                    <div class="summary-resort-loc">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 21s-8-7.3-8-12a8 8 0 0116 0c0 4.7-8 12-8 12z" />
+                            <circle cx="12" cy="9" r="2.5" />
+                        </svg>
+                        @Model.Resort.Location?.Province
                     </div>
                 }
 
                 @if (Model.RoomType != null)
                 {
-                    <div class="summary-row"><span>Loại phòng</span><span>@Model.RoomType.Name</span></div>
+                    <div class="summary-row">
+                        <span>Loại phòng</span>
+                        <span>@Model.RoomType.Name</span>
+                    </div>
                 }
-                <div class="summary-row"><span>Nhận phòng</span><span>@Model.CheckInDate</span></div>
-                <div class="summary-row"><span>Trả phòng</span><span>@Model.CheckOutDate</span></div>
-                <div class="summary-row"><span>Số đêm</span><span>@Model.TotalNights đêm</span></div>
-                <div class="summary-row"><span>Số phòng</span><span>@Model.NumRooms</span></div>
-                <div class="summary-row"><span>Người lớn</span><span>@Model.NumAdults</span></div>
-                <div class="summary-row"><span>Trẻ em</span><span>@Model.NumChildren</span></div>
+                <div class="summary-row">
+                    <span>Nhận phòng</span>
+                    <span>@Model.CheckInDate</span>
+                </div>
+                <div class="summary-row">
+                    <span>Trả phòng</span>
+                    <span>@Model.CheckOutDate</span>
+                </div>
+                <div class="summary-row">
+                    <span>Số đêm</span>
+                    <span>@Model.TotalNights đêm</span>
+                </div>
+                <div class="summary-row">
+                    <span>Số phòng</span>
+                    <span>@Model.NumRooms phòng</span>
+                </div>
+                <div class="summary-row">
+                    <span>Người lớn</span>
+                    <span>@Model.NumAdults người</span>
+                </div>
+                <div class="summary-row">
+                    <span>Trẻ em</span>
+                    <span>@Model.NumChildren em</span>
+                </div>
 
-                <hr />
+                <div class="summary-divider"></div>
+
                 <div class="summary-row">
                     <span>Tiền phòng</span>
                     <span>@Model.EstimatedTotal.ToString("N0")đ</span>
@@ -120,5 +242,10 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScripts" />
+}

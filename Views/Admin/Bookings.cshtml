@@ -3,19 +3,15 @@
 @{
     ViewData["Title"] = "Quản lý Booking";
     Layout = "_AdminLayout";
+    ViewData["HeaderSection"] = "Quản lý";
+    ViewData["HeaderTitle"] = "Danh sách Booking";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
 }
 
-<!-- Header -->
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
-    <div>
-        <div style="font-size:0.72rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Quản lý</div>
-        <h2 style="font-size:1.3rem;font-weight:800;color:#0f172a;margin:0;">Danh sách Booking</h2>
-    </div>
-</div>
+<partial name="_AdminPageHeader" />
 
 <!-- Filter bar -->
 <form asp-action="Bookings" method="get" class="abk-filter">

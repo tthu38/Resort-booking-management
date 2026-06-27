@@ -1,35 +1,154 @@
 @model List<ResortBookingMVC.Models.User>
+@using ResortBookingMVC.Models.Enums
 @{
     ViewData["Title"] = "Quản lý người dùng";
     Layout = "_AdminLayout";
+    ViewData["HeaderSection"] = "Quản lý";
+    ViewData["HeaderTitle"] = "Người dùng";
 }
 
-<div class="admin-page-header">
-    <h2 class="admin-page-title">👥 Quản lý người dùng</h2>
-</div>
-<form asp-action="Users" method="get" class="admin-filter-bar">
-    <input type="text" name="search" value="@ViewBag.Search" placeholder="Tìm tên hoặc email..." class="form-control" />
-    <button type="submit" class="btn btn-primary">Tìm</button>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+}
+
+<partial name="_AdminPageHeader" />
+
+<!-- Filter -->
+<form asp-action="Users" method="get" class="abk-filter" style="margin-bottom:1.25rem;">
+    <div class="abk-search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <input type="text" name="search" value="@ViewBag.Search"
+               placeholder="Tìm tên hoặc email..." class="abk-search" />
+    </div>
+    <button type="submit" class="abk-btn-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+        </svg>
+        Tìm kiếm
+    </button>
 </form>
-<div class="admin-card">
-    <div class="table-responsive">
-        <table class="admin-table">
-            <thead><tr><th>Họ tên</th><th>Email</th><th>SĐT</th><th>Vai trò</th><th>Trạng thái</th><th>Ngày tạo</th><th>Hành động</th></tr></thead>
+
+<!-- Table -->
+<div class="abk-card">
+    <div style="overflow-x:auto;">
+        <table class="abk-table">
+            <thead>
+                <tr>
+                    <th>Người dùng</th>
+                    <th>Số điện thoại</th>
+                    <th>Vai trò</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
             <tbody>
-                @foreach (var u in Model)
+                @if (!Model.Any())
                 {
                     <tr>
-                        <td>@u.FullName</td>
-                        <td>@u.Email</td>
-                        <td>@u.PhoneNumber</td>
-                        <td><span class="badge badge-@u.Role.ToString().ToLower()">@u.Role</span></td>
-                        <td><span class="badge @(u.IsActive ? "badge-success" : "badge-danger")">@(u.IsActive ? "Active" : "Blocked")</span></td>
-                        <td>@u.CreatedAt.ToString("dd/MM/yyyy")</td>
+                        <td colspan="6">
+                            <div style="text-align:center;padding:2.5rem;color:#94a3b8;">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                     stroke="#e2e8f0" stroke-width="1.5"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     style="display:block;margin:0 auto 0.75rem;">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                </svg>
+                                Không tìm thấy người dùng nào
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @foreach (var u in Model)
+                {
+                    string roleClass = u.Role switch
+                    {
+                        Role.ADMIN => "au-role-admin",
+                        Role.STAFF => "au-role-staff",
+                        Role.CUSTOMER => "au-role-customer",
+                        _ => "au-role-customer"
+                    };
+                    string roleLabel = u.Role switch
+                    {
+                        Role.ADMIN => "Admin",
+                        Role.STAFF => "Staff",
+                        Role.CUSTOMER => "Customer",
+                        _ => u.Role.ToString()
+                    };
+
+                    <tr>
+                        <!-- Avatar + tên + email -->
+                        <td>
+                            <div class="abk-guest">
+                                <div class="abk-avatar" style="@(!u.IsActive ? "background:rgba(239,68,68,0.1);color:#ef4444;" : "")">
+                                    @(u.FullName?.Length > 0 ? u.FullName[0].ToString().ToUpper() : "?")
+                                </div>
+                                <div>
+                                    <div class="abk-guest-name">@u.FullName</div>
+                                    <div class="abk-guest-email">@u.Email</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- SĐT -->
+                        <td>
+                            <div style="font-size:0.8rem;color:#374151;">
+                                @(string.IsNullOrEmpty(u.PhoneNumber) ? "—" : u.PhoneNumber)
+                            </div>
+                        </td>
+
+                        <!-- Vai trò -->
+                        <td>
+                            <span class="au-role @roleClass">@roleLabel</span>
+                        </td>
+
+                        <!-- Trạng thái -->
+                        <td>
+                            <span class="abk-status @(u.IsActive ? "abk-s-confirmed" : "abk-s-cancelled")">
+                                @(u.IsActive ? "Hoạt động" : "Đã khóa")
+                            </span>
+                        </td>
+
+                        <!-- Ngày tạo -->
+                        <td>
+                            <div style="font-size:0.8rem;color:#374151;white-space:nowrap;">
+                                @u.CreatedAt.ToString("dd/MM/yyyy")
+                            </div>
+                        </td>
+
+                        <!-- Hành động -->
                         <td>
                             <form asp-action="ToggleUserActive" asp-route-id="@u.Id" method="post">
                                 @Html.AntiForgeryToken()
-                                <button class="btn btn-sm @(u.IsActive ? "btn-danger" : "btn-success")">
-                                    @(u.IsActive ? "Khóa" : "Mở khóa")
+                                <button class="abk-btn @(u.IsActive ? "au-btn-lock" : "au-btn-unlock")">
+                                    @if (u.IsActive)
+                                    {
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                                        </svg>
+                                        <span>Khóa</span>
+                                    }
+                                    else
+                                    {
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                            <path d="M7 11V7a5 5 0 019.9-1" />
+                                        </svg>
+                                        <span>Mở khóa</span>
+                                    }
                                 </button>
                             </form>
                         </td>

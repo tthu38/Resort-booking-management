@@ -2,36 +2,136 @@
 @{
     ViewData["Title"] = "Quản lý Resort";
     Layout = "_AdminLayout";
+    ViewData["HeaderSection"] = "Quản lý";
+    ViewData["HeaderTitle"] = "Danh sách Resort";
+    ViewData["HeaderBtnUrl"] = Url.Action("CreateResort");
+    ViewData["HeaderBtnLabel"] = "Thêm resort";
+    ViewData["HeaderBtnIcon"] = "add";
 }
 
-<div class="admin-page-header">
-    <h2 class="admin-page-title">🏨 Quản lý Resort</h2>
-    <a asp-action="CreateResort" class="btn btn-primary">+ Thêm resort</a>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+}
 
-<div class="admin-card">
-    <div class="table-responsive">
-        <table class="admin-table">
+<partial name="_AdminPageHeader" />
+
+<!-- Table card -->
+<div class="abk-card">
+    <div style="overflow-x:auto;">
+        <table class="abk-table">
             <thead>
-                <tr><th>Tên resort</th><th>Địa điểm</th><th>Sao</th><th>Số loại phòng</th><th>Trạng thái</th><th>Hành động</th></tr>
+                <tr>
+                    <th>Resort</th>
+                    <th>Địa điểm</th>
+                    <th>Hạng sao</th>
+                    <th>Loại phòng</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach (var r in Model)
                 {
                     <tr>
-                        <td><strong>@r.Name</strong><br/><small>@r.Address</small></td>
-                        <td>@r.Location?.Province</td>
-                        <td>@(r.StarRating.HasValue ? string.Concat(Enumerable.Repeat("★", r.StarRating.Value)) : "-")</td>
-                        <td>@r.RoomTypes?.Count loại</td>
-                        <td><span class="badge @(r.IsActive ? "badge-success" : "badge-danger")">@(r.IsActive ? "Hoạt động" : "Ẩn")</span></td>
-                        <td class="action-btns">
-                            <a asp-action="EditResort" asp-route-id="@r.Id" class="btn btn-sm btn-warning">✏ Sửa</a>
-                            <a asp-action="RoomTypes" asp-route-resortId="@r.Id" class="btn btn-sm btn-info">🛏 Phòng</a>
-                            <form asp-action="DeleteResort" asp-route-id="@r.Id" method="post" style="display:inline"
-                                  onsubmit="return confirm('Xác nhận ẩn resort?')">
-                                @Html.AntiForgeryToken()
-                                <button class="btn btn-sm btn-danger">🗑 Ẩn</button>
-                            </form>
+                        <!-- Resort name + address -->
+                        <td>
+                            <div class="ar-resort-name">@r.Name</div>
+                            <div class="ar-resort-addr">@r.Address</div>
+                        </td>
+
+                        <!-- Location -->
+                        <td>
+                            <div class="ar-location">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                     stroke="#94a3b8" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 21s-8-7.3-8-12a8 8 0 0116 0c0 4.7-8 12-8 12z" />
+                                    <circle cx="12" cy="9" r="2.5" />
+                                </svg>
+                                @r.Location?.Province
+                            </div>
+                        </td>
+
+                        <!-- Star rating -->
+                        <td>
+                            @if (r.StarRating.HasValue)
+                            {
+                                <div class="ar-stars">
+                                    @for (int s = 0; s < r.StarRating.Value; s++)
+                                    {
+                                        <svg width="12" height="12" viewBox="0 0 24 24"
+                                             fill="#f59e0b" stroke="#f59e0b" stroke-width="1">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    }
+                                    <span class="ar-star-num">@r.StarRating sao</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <span style="color:#cbd5e1;font-size:0.8rem;">—</span>
+                            }
+                        </td>
+
+                        <!-- Room types count -->
+                        <td>
+                            <div class="ar-room-count">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                     stroke="rgb(45,212,191)" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" />
+                                    <path d="M2 11h20v9a2 2 0 01-2 2H4a2 2 0 01-2-2v-9z" />
+                                </svg>
+                                @r.RoomTypes?.Count loại phòng
+                            </div>
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                            <span class="abk-status @(r.IsActive ? "abk-s-confirmed" : "abk-s-cancelled")">
+                                @(r.IsActive ? "Hoạt động" : "Đã ẩn")
+                            </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                            <div class="abk-actions">
+                                <a asp-action="EditResort" asp-route-id="@r.Id" class="abk-btn ar-btn-edit">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                    </svg>
+                                    Sửa
+                                </a>
+
+                                <a asp-action="RoomTypes" asp-route-resortId="@r.Id" class="abk-btn ar-btn-rooms">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 9V6a2 2 0 012-2h16a2 2 0 012 2v3" />
+                                        <path d="M2 11h20v9a2 2 0 01-2 2H4a2 2 0 01-2-2v-9z" />
+                                    </svg>
+                                    Phòng
+                                </a>
+
+                                <form asp-action="DeleteResort" asp-route-id="@r.Id" method="post"
+                                      style="display:inline"
+                                      onsubmit="return confirm('Xác nhận ẩn resort này?')">
+                                    @Html.AntiForgeryToken()
+                                    <button class="abk-btn ar-btn-hide">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
+                                            <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+                                            <line x1="1" y1="1" x2="23" y2="23" />
+                                        </svg>
+                                        Ẩn
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 }

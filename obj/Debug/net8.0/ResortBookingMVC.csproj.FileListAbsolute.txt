@@ -275,3 +275,5 @@ D:\Resort-booking-management\obj\Debug\net8.0\refint\ResortBookingMVC.dll
 D:\Resort-booking-management\obj\Debug\net8.0\ResortBookingMVC.pdb
 D:\Resort-booking-management\obj\Debug\net8.0\ResortBookingMVC.genruntimeconfig.cache
 D:\Resort-booking-management\obj\Debug\net8.0\ref\ResortBookingMVC.dll
+D:\Resort-booking-management\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
+D:\Resort-booking-management\bin\Debug\net8.0\wwwroot\email-templates\otp-email.html

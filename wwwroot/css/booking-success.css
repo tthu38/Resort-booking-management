@@ -1,0 +1,247 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.success-page {
+    min-height: 100vh;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    padding: 3rem 1.5rem;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.success-inner {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 3rem;
+    align-items: center;
+}
+
+/* LEFT */
+.success-left {
+}
+
+.success-resort-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgb(45,212,191);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.success-left h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    font-family: 'Nunito', 'Inter', system-ui, sans-serif;
+}
+
+.success-left p {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0 0 0.5rem;
+    max-width: 400px;
+}
+
+.booking-code-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1.5rem 0 2rem;
+}
+
+.booking-code-label {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.booking-code-val {
+    font-size: 1rem;
+    font-weight: 800;
+    color: rgb(15,150,130);
+    background: #f0fdfb;
+    border: 1.5px solid rgba(45,212,191,0.3);
+    border-radius: 8px;
+    padding: 0.35rem 0.9rem;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+.success-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.75rem 1.5rem;
+    background: rgb(45,212,191);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+    .btn-primary-success:hover {
+        background: rgb(20,190,170);
+        color: #fff;
+    }
+
+.btn-ghost-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+    .btn-ghost-success:hover {
+        color: #0f172a;
+    }
+
+/* RIGHT — Detail card */
+.success-right {
+}
+
+.detail-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.detail-card-top {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 4px;
+    font-family: 'Nunito', 'Inter', system-ui, sans-serif;
+}
+
+.detail-amount-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.detail-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #fef9c3;
+    color: #a16207;
+    border: 1px solid #fde68a;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
+}
+
+.detail-rows {
+    padding: 1rem 1.5rem;
+}
+
+.detail-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.85rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #f8fafc;
+}
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-row span:first-child {
+        color: #94a3b8;
+    }
+
+    .detail-row span:last-child {
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+.detail-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+
+.detail-row-total {
+    font-size: 0.95rem;
+    padding: 0.6rem 0;
+}
+
+    .detail-row-total span:first-child {
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+    .detail-row-total span:last-child {
+        color: rgb(45,212,191);
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+
+.detail-row-deposit span:first-child {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.detail-row-deposit span:last-child {
+    color: rgb(15,150,130);
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .success-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .success-page {
+        align-items: flex-start;
+        padding: 2rem 1.25rem;
+    }
+
+    .success-left h1 {
+        font-size: 1.75rem;
+    }
+}
