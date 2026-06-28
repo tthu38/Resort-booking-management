@@ -183,6 +183,10 @@ namespace ResortBookingMVC.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Xóa cookie khỏi trình duyệt
+            Response.Cookies.Delete(".AspNetCore.Cookies");
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -373,16 +377,22 @@ namespace ResortBookingMVC.Controllers
         private async Task SignInUser(User user, bool isPersistent)
         {
             var claims = new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Name,           user.FullName),
-                new(ClaimTypes.Email,          user.Email),
-                new(ClaimTypes.Role,           user.Role.ToString())
-            };
+    {
+        new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new(ClaimTypes.Name,           user.FullName),
+        new(ClaimTypes.Email,          user.Email),
+        new(ClaimTypes.Role,           user.Role.ToString())
+    };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
-            var properties = new AuthenticationProperties { IsPersistent = isPersistent };
+            var properties = new AuthenticationProperties
+            {
+                IsPersistent = isPersistent,
+                ExpiresUtc = isPersistent
+                    ? DateTimeOffset.UtcNow.AddDays(1)   // nhớ đăng nhập → 1 ngày
+                    : null                                 // không nhớ → đóng tab là hết
+            };
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
         }

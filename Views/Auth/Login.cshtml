@@ -43,7 +43,7 @@
 
         <div class="divider">HOẶC</div>
 
-        <form asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
+        <form asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
@@ -58,7 +58,8 @@
                 <label asp-for="Password">Mật khẩu</label>
                 <div class="input-password">
                     <input asp-for="Password" type="password"
-                           placeholder="••••••••" autocomplete="current-password"
+                           placeholder="••••••••"
+                           autocomplete="new-password"
                            id="passwordInput" />
                     <button type="button" class="toggle-pw"
                             onclick="togglePassword()"

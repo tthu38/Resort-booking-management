@@ -6,12 +6,12 @@
 
 /* ── FULL SCREEN BACKGROUND ── */
 .auth-page {
-    min-height: 100vh;
+    min-height: calc(100vh - 68px);
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1.25rem;
+    padding: 1rem;
     font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
@@ -44,38 +44,39 @@
     -webkit-backdrop-filter: blur(20px);
     border-radius: 24px;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
-    padding: 2.5rem 2.25rem;
-    width: 100%;
+    padding: 1.5rem 2rem;
+    width: 80%;
     max-width: 420px;
+    margin-bottom: -50px;
 }
 
 /* Logo circle */
 .auth-logo {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     background: rgba(45,212,191,0.1);
     border: 1.5px solid rgba(45,212,191,0.3);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1.25rem;
+    margin: 0 auto 0.75rem;
 }
 
 .auth-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: #0f172a;
     text-align: center;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
     font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
 }
 
 .auth-card .auth-subtitle {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: #64748b;
     text-align: center;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1rem;
 }
 
 /* Google button */
@@ -85,7 +86,7 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 0.7rem 1rem;
+    padding: 0.6rem 1rem;
     border: 1.5px solid #e2e8f0;
     border-radius: 12px;
     background: #fff;
@@ -107,7 +108,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin: 1.1rem 0;
+    margin: 0.75rem 0;
     color: #94a3b8;
     font-size: 0.75rem;
     font-weight: 600;
@@ -123,7 +124,7 @@
 
 /* Form fields */
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 0.65rem;
 }
 
     .form-group label {
@@ -131,7 +132,7 @@
         font-size: 0.8rem;
         font-weight: 600;
         color: #374151;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.3rem;
     }
 
     .form-group input[type="email"],
@@ -139,10 +140,10 @@
     .form-group input[type="text"],
     .form-group input[type="tel"] {
         width: 100%;
-        padding: 0.65rem 0.9rem;
+        padding: 0.55rem 0.9rem;
         border: 1.5px solid #e2e8f0;
         border-radius: 10px;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         color: #0f172a;
         background: #fff;
         outline: none;
@@ -193,7 +194,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.9rem;
     font-size: 0.83rem;
     color: #374151;
 }
@@ -226,10 +227,10 @@
 .btn-primary-full {
     display: block;
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.7rem;
     background: rgb(45,212,191);
     color: #fff;
-    font-size: 0.925rem;
+    font-size: 0.9rem;
     font-weight: 700;
     border: none;
     border-radius: 12px;
@@ -250,7 +251,7 @@
 /* Switch */
 .auth-switch {
     text-align: center;
-    margin-top: 1.25rem;
+    margin-top: 0.9rem;
     font-size: 0.875rem;
     color: #64748b;
 }
@@ -273,7 +274,7 @@
     padding: 0.65rem 0.9rem;
     font-size: 0.83rem;
     color: #b91c1c;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .field-error {
@@ -286,7 +287,7 @@
 /* Brand watermark bottom */
 .auth-brand {
     position: fixed;
-    bottom: 1.5rem;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
@@ -300,10 +301,16 @@
     white-space: nowrap;
 }
 
+/* ── override main-content padding cho auth pages ── */
+.main-content:has(.auth-page) {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
     .auth-card {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1.25rem;
         border-radius: 18px;
     }
 }

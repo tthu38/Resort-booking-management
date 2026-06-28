@@ -10,12 +10,18 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "home-page" : "")">
 
-    @{
+@{
         bool isHome = ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
-        && ViewContext.RouteData.Values["action"]?.ToString() == "Index";
-    }
+                && ViewContext.RouteData.Values["action"]?.ToString() == "Index";
+
+        bool isAuthPage = ViewContext.RouteData.Values["controller"]?.ToString() == "Auth"
+                && (ViewContext.RouteData.Values["action"]?.ToString() == "Login"
+                        || ViewContext.RouteData.Values["action"]?.ToString() == "Register"
+                        || ViewContext.RouteData.Values["action"]?.ToString() == "ForgotPassword");
+}
+
+<body class="@(isHome ? "home-page" : "") @(isAuthPage ? "no-scroll" : "")">
 
     <nav class="navbar @(isHome ? "navbar-transparent" : "navbar-solid")">
         <div class="nav-container">

@@ -17,6 +17,7 @@ h1, h2, h3, h4, h5, h6,
 .profile-header h1 {
     font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
 }
+
 * {
     font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
@@ -24,8 +25,9 @@ h1, h2, h3, h4, h5, h6,
 h1, h2, h3, h4 {
     font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
 }
+
 :root {
-    --primary: #2dd4bf; /* teal — màu chủ đạo Chozie */
+    --primary: #2dd4bf;
     --primary-dark: #14b8a6;
     --accent: #0f172a;
     --dark: #0f172a;
@@ -1143,49 +1145,15 @@ textarea.form-control {
     padding-top: 0;
 }
 
-body:not(.home-page) .main-content {
-    padding-top: 68px;
+body:not(.home-page) .main-content:has(.auth-page) {
+    overflow: hidden;
+    height: calc(100vh - 68px);
 }
 
-/* ══════════════════════════════
-   AUTH PAGES
-══════════════════════════════ */
-.auth-page {
-    min-height: calc(100vh - 68px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    background: var(--light-gray);
+body:has(.auth-page) {
+    overflow: hidden !important;
+    height: 100vh !important;
 }
-
-.auth-card {
-    background: #fff;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-md);
-    padding: 40px;
-    width: 100%;
-    max-width: 440px;
-}
-
-.auth-title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 28px;
-    text-align: center;
-}
-
-.auth-switch {
-    text-align: center;
-    margin-top: 20px;
-    color: var(--gray);
-    font-size: .88rem;
-}
-
-    .auth-switch a {
-        color: var(--primary);
-        font-weight: 600;
-    }
 
 /* ══════════════════════════════
    SEARCH PAGE
@@ -1982,7 +1950,7 @@ body:not(.home-page) .main-content {
     }
 
 /* ══════════════════════════════
-   ADMIN (basic — dùng admin.css riêng)
+   ADMIN
 ══════════════════════════════ */
 .mt-4 {
     margin-top: 24px;
@@ -2101,6 +2069,7 @@ body:not(.home-page) .main-content {
         height: 200px;
     }
 }
+
 .nav-dropdown {
     display: none;
     position: absolute;
